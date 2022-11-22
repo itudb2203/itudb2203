@@ -14,8 +14,6 @@ def create_app():
 
     home_dir = os.getcwd()
 
-    ## REACH to the pre-created database
-
     db = Database(os.path.join(home_dir, "lahman2016.sqlite"))
 
     app.config["dbconfig"] = db

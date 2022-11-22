@@ -1,5 +1,3 @@
-# 1-) CREATING DATA MODEL
-
 class Player:
     def __init__(self, playerID, nameFirst, nameLast, birthYear, birthCountry, weight, height):
         self.playerID = playerID
