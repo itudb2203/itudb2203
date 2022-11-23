@@ -1,12 +1,22 @@
 from flask import Flask
+import os
 
 import views
+from database import Database
+
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object("settings")
 
     app.add_url_rule("/", view_func=views.home_page)
+    app.add_url_rule("/players/<page_num>", view_func=views.players_page)
+
+    home_dir = os.getcwd()
+
+    db = Database(os.path.join(home_dir, "lahman2016.sqlite"))
+
+    app.config["dbconfig"] = db
 
     return app
 
