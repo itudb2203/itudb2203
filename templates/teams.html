@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Teams{% endblock %}
+{% block content %}
+
+    <h3 class="display-5 text-center mb-3 text-dark" > Teams </h3>
+    <table class="table is-striped is-fullwidth table-hover">
+      <tr>
+      <th>#</th>
+      <th>Team ID</th>
+      <th>Year</th>
+      <th>Team Name</th>
+      <th>Team Rank</th>
+      <th>League Win</th>
+      <th>Games</th>
+      <th>Wins</th>
+      <th>Losses</th>
+      <th>Runs</th>
+      <th>Errors</th>
+      <th>Park</th>
+      </tr>
+      {% for i in range(teams|length)%}
+      <tr>
+        <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
+        <td>{{ teams[i].teamID }}</td>
+        <td>{{ teams[i].yearID }}</td>
+        <td>{{ teams[i].name }}</td>
+        <td>{{ teams[i].Rank }}</td>
+        <td>{{ teams[i].LgWin }}</td>
+        <td>{{ teams[i].G }}</td>
+        <td>{{ teams[i].W }}</td>
+        <td>{{ teams[i].L }}</td>
+        <td>{{ teams[i].R }}</td>
+        <td>{{ teams[i].E }}</td>
+        <td>{{ teams[i].park }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <div class="col-xl">
+        <ul class="pagination justify-content-center mt-5">
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=1) }}"> << </a> </li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=(1, cur_page - 1)|max) }}"> < </a> </li>
+          <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=(num_pages, cur_page + 1)|min) }}"> > </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=284) }}"> >> </a></li>
+        </ul>
+      </div>
+
+{% endblock %}
