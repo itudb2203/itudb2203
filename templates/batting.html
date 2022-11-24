@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block title %}Players{% endblock %}
+{% block content %}
+
+    <h3 class="display-5 text-center mb-3 text-dark" > Batting </h3>
+    <table class="table is-striped is-fullwidth table-hover">
+      <tr>
+      <th>#</th>
+      <th>Player ID</th>
+      <th>yearID</th>
+      <th>teamID</th>
+      <th>lgID</th>
+      <th>R</th>
+      <th>G</th>
+      </tr>
+      {% for i in range(batting|length)%}
+      <tr>
+        <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
+        <td>{{ batting[i].playerID }}</td>
+        <td>{{ batting[i].yearID }}</td>
+        <td>{{ batting[i].teamID }}</td>
+        <td>{{ batting[i].lgID }}</td>
+        <td>{{ batting[i].R }}</td>
+        <td>{{ batting[i].G }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <div class="col-xl">
+        <ul class="pagination justify-content-center mt-5">
+          <li class="page-item"><a class="page-link" href="{{ url_for('batting_page', page_num=1) }}"> << </a> </li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('batting_page', page_num=(1, cur_page - 1)|max) }}"> < </a> </li>
+          <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('batting_page', page_num=(num_pages, cur_page + 1)|min) }}"> > </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('batting_page', page_num=10282) }}"> >> </a></li>
+        </ul>
+      </div>
+
+{% endblock %}

@@ -3,8 +3,9 @@
 {% block content %}
 
     <div class="d-grid gap-2 col-7 mx-auto ">
-        <a class="btn btn-outline-primary btn-lg mb-2"> Teams </a>
+        <a href="{{ url_for('teams_page', page_num=1) }}" class="btn btn-outline-primary btn-lg mb-2"> Teams </a>
         <a href="{{ url_for('players_page', page_num=1) }}" class="btn btn-outline-primary btn-lg"> Players </a>
+        <a href="{{ url_for('batting_page', page_num=1) }}" class="btn btn-outline-primary btn-lg"> Batting </a>
     </div>
 
 {% endblock %}
