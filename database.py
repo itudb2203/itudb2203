@@ -26,3 +26,13 @@ class Database:
             num_of_players = cursor.fetchone()[0]
             cursor.close()
             return num_of_players
+
+    def get_player_name(self,player_ID):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT nameFirst, nameLast FROM Master
+            WHERE playerID = ?"""
+            cursor.execute(query, (player_ID,))
+            name_list = cursor.fetchone()
+            cursor.close()
+            return name_list[0] + " " + name_list[1]
