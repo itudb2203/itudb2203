@@ -15,7 +15,7 @@
       <th>Height</th>
       </tr>
       {% for i in range(players|length)%}
-      <tr>
+      <tr onclick='window.location="{{ url_for('player_stats_page', player_ID = players[i].playerID) }}";' style="cursor:pointer">
         <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
         <td>{{ players[i].playerID }}</td>
         <td>{{ players[i].nameFirst }}</td>
