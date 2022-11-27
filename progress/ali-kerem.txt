@@ -6,3 +6,9 @@
 - Created home page (branch: ali/feature/home-page)
 - Merged home-page branch to main
 - Created ali/feature/players-page branch and pushed the necessary files and changes for the players page
+
+3. Week (21-27 Nov)
+- Added features to players page (Calculating number of pages dynamically, hyperlinks to player stats page)
+- Merged players page to main
+- Created player stats page
+- Merged player stats page to main
