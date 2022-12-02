@@ -14,3 +14,9 @@ def player_stats_page(player_ID):
     myDB = current_app.config["dbconfig"]
     player_name = myDB.get_player_name(player_ID)
     return render_template("player_stats.html", player_name=player_name, player_ID=player_ID)
+
+def hall_of_fame_page(player_ID):
+    myDB = current_app.config["dbconfig"]
+    player_name = myDB.get_player_name(player_ID)
+    hof = myDB.get_hall_of_fame(player_ID)
+    return render_template("hall_of_fame.html", player_name=player_name, player_ID=player_ID, hall_of_fame=hof)

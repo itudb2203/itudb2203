@@ -1,0 +1,36 @@
+{% extends "layout_player.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+    {% if hall_of_fame %}
+      <h3 class="display-5 text-center mb-3 text-dark" > Hall Of Fame </h3>
+      <table class="table is-striped is-fullwidth table-hover">
+        <tr>
+        <th>#</th>
+        <th>Year</th>
+        <th>Category</th>
+        <th>Voting Method</th>
+        <th>Total Cast Ballots</th>
+        <th>Votes Needed</th>
+        <th>Votes Received</th>
+        <th>Inducted</th>
+        </tr>
+        {% for i in range(hall_of_fame|length)%}
+        <tr>
+          <td>{{ i + 1 }}</td>
+          <td>{{ hall_of_fame[i].yearid }}</td>
+          <td>{{ hall_of_fame[i].category }}</td>
+          <td>{{ hall_of_fame[i].votedBy }}</td>
+          <td>{{ hall_of_fame[i].ballots }}</td>
+          <td>{{ hall_of_fame[i].needed }}</td>
+          <td>{{ hall_of_fame[i].votes }}</td>
+          <td>{{ "Yes" if hall_of_fame[i].inducted == "Y" else "No" }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <h3 class="display-6 text-center mb-3 text-dark" > The player has no hall of fame data.</h3>
+    {% endif %}
+
+
+{% endblock %}

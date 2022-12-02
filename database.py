@@ -1,5 +1,6 @@
 import sqlite3 as dbapi2
 from player import Player
+from hall_of_fame import HallOfFame
 
 class Database:
     def __init__(self, dbfile):
@@ -36,3 +37,16 @@ class Database:
             name_list = cursor.fetchone()
             cursor.close()
             return name_list[0] + " " + name_list[1]
+
+    def get_hall_of_fame(self, player_ID):
+        hof_list = []
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT yearid, votedBy, ballots, needed, votes, inducted, category FROM HallOfFame
+            WHERE playerID = ?
+            ORDER BY yearid"""
+            cursor.execute(query, (player_ID,))
+            for yearid, votedBy, ballots, needed, votes, inducted, category in cursor:
+                hof_list.append(HallOfFame(yearid, votedBy, ballots, needed, votes, inducted, category))
+            cursor.close()
+            return hof_list
