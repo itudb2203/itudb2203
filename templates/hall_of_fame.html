@@ -14,6 +14,7 @@
         <th>Votes Needed</th>
         <th>Votes Received</th>
         <th>Inducted</th>
+        <th>Operations</th>
         </tr>
         {% for i in range(hall_of_fame|length)%}
         <tr>
@@ -25,6 +26,17 @@
           <td>{{ hall_of_fame[i].needed }}</td>
           <td>{{ hall_of_fame[i].votes }}</td>
           <td>{{ "Yes" if hall_of_fame[i].inducted == "Y" else "No" }}</td>
+          <td>
+            <div class="dropdown show">
+              <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Operations
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="">Update</a>
+                <a class="dropdown-item" href="{{ url_for('del_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid) }}">Delete</a>
+              </div>
+            </div>
+          </td>
         </tr>
         {% endfor %}
       </table>

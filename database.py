@@ -50,3 +50,10 @@ class Database:
                 hof_list.append(HallOfFame(yearid, votedBy, ballots, needed, votes, inducted, category))
             cursor.close()
             return hof_list
+
+    def del_hall_of_fame(self, player_ID, yearid):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = "DELETE FROM HallOfFame WHERE (playerID = ? AND yearid = ?)"
+            cursor.execute(query, (player_ID, yearid))
+            cursor.close()
