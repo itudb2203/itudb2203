@@ -3,7 +3,7 @@
 {% block content %}
 
     {% if hall_of_fame %}
-      <h3 class="display-5 text-center mb-3 text-dark" > Hall Of Fame </h3>
+      <h3 class="display-5 text-center mb-3 text-dark" > Hall of Fame </h3>
       <table class="table is-striped is-fullwidth table-hover">
         <tr>
         <th>#</th>
@@ -17,7 +17,7 @@
         <th>Operations</th>
         </tr>
         {% for i in range(hall_of_fame|length)%}
-        <tr>
+        <tr class="align-middle">
           <td>{{ i + 1 }}</td>
           <td>{{ hall_of_fame[i].yearid }}</td>
           <td>{{ hall_of_fame[i].category }}</td>
