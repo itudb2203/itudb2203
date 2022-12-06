@@ -12,3 +12,8 @@
 - Merged players page to main
 - Created player stats page
 - Merged player stats page to main
+
+4. Week (28 Nov - 3 Dec)
+- Created a hall of fame page
+- Added dropdown menu for selecting delete and update operations for hall of fame page
+- Implemented delete function of hall of fame page
