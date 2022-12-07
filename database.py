@@ -1,5 +1,7 @@
 import sqlite3 as dbapi2
 from player import Player
+from batting import Batting
+
 
 class Database:
     def __init__(self, dbfile):
@@ -36,3 +38,23 @@ class Database:
             name_list = cursor.fetchone()
             cursor.close()
             return name_list[0] + " " + name_list[1]
+
+    def get_batting(self, player_ID):
+        batting_list = []
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT playerID, yearid, teamID, lgID, R, G  FROM batting
+            WHERE playerID = ?
+            ORDER BY yearid"""
+            cursor.execute(query, (player_ID,))
+            for playerID, yearid, teamID, lgID, R, G in cursor:
+                batting_list.append(Batting(playerID, yearid, teamID, lgID, R, G))
+            cursor.close()
+            return batting_list
+
+    def del_batting(self, player_ID, yearid):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = "DELETE FROM batting WHERE (playerID = ? AND yearid = ?)"
+            cursor.execute(query, (player_ID, yearid))
+            cursor.close()

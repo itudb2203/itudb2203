@@ -14,3 +14,14 @@ def player_stats_page(player_ID):
     myDB = current_app.config["dbconfig"]
     player_name = myDB.get_player_name(player_ID)
     return render_template("player_stats.html", player_name=player_name, player_ID=player_ID)
+
+def batting_page(player_ID):
+    myDB = current_app.config["dbconfig"]
+    player_name = myDB.get_player_name(player_ID)
+    bat = myDB.get_batting(player_ID)
+    return render_template("batting.html", player_name=player_name, player_ID=player_ID, batting=bat)
+
+def del_batting(player_ID, yearid):
+    myDB = current_app.config["dbconfig"]
+    myDB.del_batting(player_ID, yearid)
+    return batting_page(player_ID)

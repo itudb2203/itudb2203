@@ -1,0 +1,47 @@
+{% extends "layout_player.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+
+    {% if batting %}
+      <h3 class="display-5 text-center mb-3 text-dark" > Batting </h3>
+      <table class="table is-striped is-fullwidth table-hover">
+        <tr>
+        <th>#</th>
+        <th>playerID</th>
+        <th>yearID</th>
+        <th>teamID</th>
+        <th>lgID</th>
+        <th>R</th>
+        <th>G</th>
+
+        </tr>
+        {% for i in range(batting|length)%}
+        <tr class="align-middle">
+          <td>{{ i + 1 }}</td>
+          <td>{{ batting[i].yearid }}</td>
+          <td>{{ batting[i].teamID }}</td>
+          <td>{{ batting[i].lgID }}</td>
+          <td>{{ batting[i].R }}</td>
+          <td>{{ batting[i].G }}</td>
+          <td>{{ "Yes" if batting[i].inducted == "Y" else "No" }}</td>
+          <td>
+            <div class="dropdown show">
+              <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Operations
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" href="">Update</a>
+                <a class="dropdown-item" href="{{ url_for('del_batting', player_ID = player_ID, yearid = batting[i].yearid) }}">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <h3 class="display-6 text-center mb-3 text-dark" > The player has no batting data.</h3>
+    {% endif %}
+
+
+{% endblock %}
