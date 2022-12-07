@@ -1,1 +1,12 @@
-+
+1. Week 
+- Completed the steps in "Github Instructions.pdf"
+
+2. Week 
+- Batting page added
+- Batting view function added 
+
+
+3. Week - 4.Week
+- Added hyperlinks to batting page
+- Batting delete function added on database class
+- Batting delete progress is working on page dynamically 
