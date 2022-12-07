@@ -32,7 +32,7 @@
                 Operations
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" href="">Update</a>
+                <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" href="#updateModal" year-id="my_id_value">Update</a>
                 <a class="dropdown-item" href="{{ url_for('del_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid) }}">Delete</a>
               </div>
             </div>
@@ -40,6 +40,46 @@
         </tr>
         {% endfor %}
       </table>
+      <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Update Hall of Fame Data</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="yearidUpdate" class="col-form-label">Year:</label>
+                <input type="text" class="form-control" id="yearidUpdate" >
+              </div>
+              <div class="mb-3">
+                <label for="categoryUpdate" class="col-form-label">Category:</label>
+                <input type="text" class="form-control" id="categoryUpdate">
+              </div>
+              <div class="mb-3">
+                <label for="votedByUpdate" class="col-form-label">Voting Method:</label>
+                <input type="text" class="form-control" id="votedByUpdate">
+              </div>
+              <div class="mb-3">
+                <label for="ballotsUpdate" class="col-form-label">Total Cast Ballots:</label>
+                <input type="text" class="form-control" id="ballotsUpdate">
+              </div>
+              <div class="mb-3">
+                <label for="neededUpdate" class="col-form-label">Votes Needed:</label>
+                <input type="text" class="form-control" id="neededUpdate">
+              </div>
+              <div class="mb-3">
+                <label for="votesUpdate" class="col-form-label">Votes Received:</label>
+                <input type="text" class="form-control" id="votesUpdate">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
     {% else %}
       <h3 class="display-6 text-center mb-3 text-dark" > The player has no hall of fame data.</h3>
     {% endif %}
