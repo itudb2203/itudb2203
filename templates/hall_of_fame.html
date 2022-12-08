@@ -32,7 +32,11 @@
                 Operations
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" href="#updateModal" year-id="my_id_value">Update</a>
+                <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#updateModal"
+                   data-bs-yearid="{{hall_of_fame[i].yearid}}" data-bs-category="{{hall_of_fame[i].category}}"
+                   data-bs-votedBy="{{hall_of_fame[i].votedBy}}" data-bs-ballots="{{hall_of_fame[i].ballots}}"
+                   data-bs-needed="{{hall_of_fame[i].needed}}" data-bs-votes="{{hall_of_fame[i].votes}}"
+                   data-bs-url="{{url_for('update_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid) }}">Update</a>
                 <a class="dropdown-item" href="{{ url_for('del_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid) }}">Delete</a>
               </div>
             </div>
@@ -40,49 +44,84 @@
         </tr>
         {% endfor %}
       </table>
-      <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Update Hall of Fame Data</h5>
+              <h5 class="modal-title" id="updateModalLabel">Update Hall of Fame Data</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-              <div class="mb-3">
-                <label for="yearidUpdate" class="col-form-label">Year:</label>
-                <input type="text" class="form-control" id="yearidUpdate" >
+            <form method="post" id="formUpdate">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="yearidUpdate" class="col-form-label">Year:</label>
+                  <input type="text" class="form-control" id="yearidUpdate" name="yearidUpdate">
+                </div>
+                <div class="mb-3">
+                  <label for="categoryUpdate" class="col-form-label">Category:</label>
+                  <input type="text" class="form-control" id="categoryUpdate" name="categoryUpdate">
+                </div>
+                <div class="mb-3">
+                  <label for="votedByUpdate" class="col-form-label">Voting Method:</label>
+                  <input type="text" class="form-control" id="votedByUpdate" name="votedByUpdate">
+                </div>
+                <div class="mb-3">
+                  <label for="ballotsUpdate" class="col-form-label">Total Cast Ballots:</label>
+                  <input type="text" class="form-control" id="ballotsUpdate" name="ballotsUpdate">
+                </div>
+                <div class="mb-3">
+                  <label for="neededUpdate" class="col-form-label">Votes Needed:</label>
+                  <input type="text" class="form-control" id="neededUpdate" name="neededUpdate">
+                </div>
+                <div class="mb-3">
+                  <label for="votesUpdate" class="col-form-label">Votes Received:</label>
+                  <input type="text" class="form-control" id="votesUpdate" name="votesUpdate">
+                </div>
               </div>
-              <div class="mb-3">
-                <label for="categoryUpdate" class="col-form-label">Category:</label>
-                <input type="text" class="form-control" id="categoryUpdate">
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
               </div>
-              <div class="mb-3">
-                <label for="votedByUpdate" class="col-form-label">Voting Method:</label>
-                <input type="text" class="form-control" id="votedByUpdate">
-              </div>
-              <div class="mb-3">
-                <label for="ballotsUpdate" class="col-form-label">Total Cast Ballots:</label>
-                <input type="text" class="form-control" id="ballotsUpdate">
-              </div>
-              <div class="mb-3">
-                <label for="neededUpdate" class="col-form-label">Votes Needed:</label>
-                <input type="text" class="form-control" id="neededUpdate">
-              </div>
-              <div class="mb-3">
-                <label for="votesUpdate" class="col-form-label">Votes Received:</label>
-                <input type="text" class="form-control" id="votesUpdate">
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+            </form>
           </div>
         </div>
       </div>
     {% else %}
       <h3 class="display-6 text-center mb-3 text-dark" > The player has no hall of fame data.</h3>
     {% endif %}
+    <script type="text/javascript">
+      var updateModal = document.getElementById('updateModal')
+      updateModal.addEventListener('show.bs.modal', function (event) {
 
+        var button = event.relatedTarget
 
+        var yearid = button.getAttribute('data-bs-yearid')
+        var category = button.getAttribute('data-bs-category')
+        var votedBy = button.getAttribute('data-bs-votedBy')
+        var ballots = button.getAttribute('data-bs-ballots')
+        var needed = button.getAttribute('data-bs-needed')
+        var votes = button.getAttribute('data-bs-votes')
+        var url = button.getAttribute('data-bs-url')
+
+        var modalYearid = updateModal.querySelector('#yearidUpdate')
+        var modalCategory = updateModal.querySelector('#categoryUpdate')
+        var modalVotedBy = updateModal.querySelector('#votedByUpdate')
+        var modalBallots = updateModal.querySelector('#ballotsUpdate')
+        var modalNeeded = updateModal.querySelector('#neededUpdate')
+        var modalVotes = updateModal.querySelector('#votesUpdate')
+        var modalForm = updateModal.querySelector('#formUpdate')
+
+        modalYearid.value = yearid
+        modalCategory.value = category
+        modalVotedBy.value = votedBy
+        modalBallots.value = ballots
+        modalNeeded.value = needed
+        modalVotes.value = votes
+        modalForm.action = url
+      })
+
+      if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+      }
+    </script>
 {% endblock %}

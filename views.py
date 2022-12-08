@@ -1,4 +1,4 @@
-from flask import render_template, current_app
+from flask import render_template, current_app, request
 from math import ceil
 
 def home_page():
@@ -25,3 +25,24 @@ def del_hall_of_fame(player_ID, yearid):
     myDB = current_app.config["dbconfig"]
     myDB.del_hall_of_fame(player_ID, yearid)
     return hall_of_fame_page(player_ID)
+
+
+def update_hall_of_fame(player_ID, yearid):
+    if request.method == "POST":
+        yearidForm = request.form.get("yearidUpdate")
+        categoryForm = request.form.get("categoryUpdate")
+        votedByForm = request.form.get("votedByUpdate")
+        ballotsForm = request.form.get("ballotsUpdate")
+        neededForm = request.form.get("neededUpdate")
+        votesForm = request.form.get("votesUpdate")
+
+        print(yearid)
+        print(yearidForm)
+        print(categoryForm)
+        print(votedByForm)
+        print(ballotsForm)
+        print(neededForm)
+        print(votesForm)
+
+    return hall_of_fame_page(player_ID)
+
