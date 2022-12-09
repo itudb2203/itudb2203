@@ -1,5 +1,6 @@
 from flask import render_template, current_app, request
 from math import ceil
+from hall_of_fame import HallOfFame
 
 def home_page():
     return render_template("home.html")
@@ -26,23 +27,22 @@ def del_hall_of_fame(player_ID, yearid):
     myDB.del_hall_of_fame(player_ID, yearid)
     return hall_of_fame_page(player_ID)
 
-
 def update_hall_of_fame(player_ID, yearid):
     if request.method == "POST":
-        yearidForm = request.form.get("yearidUpdate")
-        categoryForm = request.form.get("categoryUpdate")
-        votedByForm = request.form.get("votedByUpdate")
-        ballotsForm = request.form.get("ballotsUpdate")
-        neededForm = request.form.get("neededUpdate")
-        votesForm = request.form.get("votesUpdate")
+        myDB = current_app.config["dbconfig"]
 
-        print(yearid)
-        print(yearidForm)
-        print(categoryForm)
-        print(votedByForm)
-        print(ballotsForm)
-        print(neededForm)
-        print(votesForm)
+        yearid_updated = request.form.get("yearidUpdate")
+        category_updated = request.form.get("categoryUpdate")
+        votedBy_updated = request.form.get("votedByUpdate")
+        ballots_updated = request.form.get("ballotsUpdate")
+        needed_updated = request.form.get("neededUpdate")
+        votes_updated = request.form.get("votesUpdate")
+        inducted_updated = "N" if int(votes_updated) < int(needed_updated) else "Y"
+
+        new_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
+
+        myDB.update_hall_of_fame(player_ID, yearid, new_hof)
+
 
     return hall_of_fame_page(player_ID)
 
