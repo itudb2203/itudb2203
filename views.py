@@ -31,18 +31,34 @@ def update_hall_of_fame(player_ID, yearid):
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
-        yearid_updated = request.form.get("yearidUpdate")
-        category_updated = request.form.get("categoryUpdate")
-        votedBy_updated = request.form.get("votedByUpdate")
-        ballots_updated = request.form.get("ballotsUpdate")
-        needed_updated = request.form.get("neededUpdate")
-        votes_updated = request.form.get("votesUpdate")
+        yearid_updated = request.form.get("yearid")
+        category_updated = request.form.get("category")
+        votedBy_updated = request.form.get("votedBy")
+        ballots_updated = request.form.get("ballots")
+        needed_updated = request.form.get("needed")
+        votes_updated = request.form.get("votes")
         inducted_updated = "N" if int(votes_updated) < int(needed_updated) else "Y"
 
-        new_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
+        updated_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
 
-        myDB.update_hall_of_fame(player_ID, yearid, new_hof)
-
+        myDB.update_hall_of_fame(player_ID, yearid, updated_hof)
 
     return hall_of_fame_page(player_ID)
 
+def add_hall_of_fame(player_ID):
+    if request.method == "POST":
+        myDB = current_app.config["dbconfig"]
+
+        yearid_new = request.form.get("yearid")
+        category_new = request.form.get("category")
+        votedBy_new = request.form.get("votedBy")
+        ballots_new = request.form.get("ballots")
+        needed_new = request.form.get("needed")
+        votes_new = request.form.get("votes")
+        inducted_new = "N" if int(votes_new) < int(needed_new) else "Y"
+
+        new_hof = HallOfFame(yearid_new, votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
+
+        myDB.add_hall_of_fame(player_ID, new_hof)
+
+    return hall_of_fame_page(player_ID)

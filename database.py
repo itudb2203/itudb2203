@@ -58,7 +58,7 @@ class Database:
             cursor.execute(query, (player_ID, yearid))
             cursor.close()
 
-    def update_hall_of_fame(self, player_ID, yearid, new_hof):
+    def update_hall_of_fame(self, player_ID, yearid, updated_hof):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
             query = """UPDATE HallOfFame
@@ -72,6 +72,15 @@ class Database:
             WHERE
                 (playerID = ? AND yearid = ?)"""
 
-            cursor.execute(query, (new_hof.yearid, new_hof.votedBy, new_hof.ballots, new_hof.needed, new_hof.votes,
-                                   new_hof.inducted, new_hof.category, player_ID, yearid))
+            cursor.execute(query, (updated_hof.yearid, updated_hof.votedBy, updated_hof.ballots, updated_hof.needed, updated_hof.votes,
+                                   updated_hof.inducted, updated_hof.category, player_ID, yearid))
+            cursor.close()
+    def add_hall_of_fame(self, player_ID, new_hof):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO HallOfFame (playerID, yearid, votedBy, ballots, needed, votes, inducted, category)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);"""
+
+            cursor.execute(query, (player_ID, new_hof.yearid, new_hof.votedBy, new_hof.ballots, new_hof.needed, new_hof.votes,
+                                   new_hof.inducted, new_hof.category))
             cursor.close()
