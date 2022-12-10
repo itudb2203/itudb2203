@@ -4,18 +4,20 @@
 
     {% if hall_of_fame %}
       <h3 class="display-5 text-center mb-3 text-dark" > Hall of Fame </h3>
-      <table class="table is-striped is-fullwidth table-hover">
-        <tr>
-        <th>#</th>
-        <th>Year</th>
-        <th>Category</th>
-        <th>Voting Method</th>
-        <th>Total Cast Ballots</th>
-        <th>Votes Needed</th>
-        <th>Votes Received</th>
-        <th>Inducted</th>
-        <th>Operations</th>
-        </tr>
+      <table class="table is-striped is-fullwidth table-hover table-bordered">
+        <thead class="table-light">
+          <tr>
+          <th>#</th>
+          <th>Year</th>
+          <th>Category</th>
+          <th>Voting Method</th>
+          <th>Total Cast Ballots</th>
+          <th>Votes Needed</th>
+          <th>Votes Received</th>
+          <th>Inducted</th>
+          <th>Operations</th>
+          </tr>
+        </thead>
         {% for i in range(hall_of_fame|length)%}
         <tr class="align-middle">
           <td>{{ i + 1 }}</td>
