@@ -51,14 +51,14 @@ class Database:
             cursor.close()
             return hof_list
 
-    def del_hall_of_fame(self, player_ID, yearid):
+    def del_hall_of_fame(self, player_ID, yearid, votedBy):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = "DELETE FROM HallOfFame WHERE (playerID = ? AND yearid = ?)"
-            cursor.execute(query, (player_ID, yearid))
+            query = "DELETE FROM HallOfFame WHERE (playerID = ? AND yearid = ? AND votedBy = ?)"
+            cursor.execute(query, (player_ID, yearid, votedBy))
             cursor.close()
 
-    def update_hall_of_fame(self, player_ID, yearid, updated_hof):
+    def update_hall_of_fame(self, player_ID, yearid, votedBy, updated_hof):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
             query = """UPDATE HallOfFame
@@ -70,10 +70,10 @@ class Database:
                 inducted = ?,
                 category = ?
             WHERE
-                (playerID = ? AND yearid = ?)"""
+                (playerID = ? AND yearid = ? AND votedBy = ?)"""
 
             cursor.execute(query, (updated_hof.yearid, updated_hof.votedBy, updated_hof.ballots, updated_hof.needed, updated_hof.votes,
-                                   updated_hof.inducted, updated_hof.category, player_ID, yearid))
+                                   updated_hof.inducted, updated_hof.category, player_ID, yearid, votedBy))
             cursor.close()
     def add_hall_of_fame(self, player_ID, new_hof):
         with dbapi2.connect(self.dbfile) as connection:

@@ -13,8 +13,8 @@ def create_app():
     app.add_url_rule("/players/<page_num>", view_func=views.players_page)
     app.add_url_rule("/player/<player_ID>", view_func=views.player_stats_page)
     app.add_url_rule("/player/<player_ID>/hall-of-fame", view_func=views.hall_of_fame_page)
-    app.add_url_rule("/player/<player_ID>/hall-of-fame/delete/<yearid>", view_func=views.del_hall_of_fame)
-    app.add_url_rule("/player/<player_ID>/hall-of-fame/update/<yearid>", methods=["GET", "POST"], view_func=views.update_hall_of_fame)
+    app.add_url_rule("/player/<player_ID>/hall-of-fame/delete/<yearid>/<votedBy>", view_func=views.del_hall_of_fame)
+    app.add_url_rule("/player/<player_ID>/hall-of-fame/update/<yearid>/<votedBy>", methods=["GET", "POST"], view_func=views.update_hall_of_fame)
     app.add_url_rule("/player/<player_ID>/hall-of-fame/add", methods=["GET", "POST"], view_func=views.add_hall_of_fame)
     home_dir = os.getcwd()
 

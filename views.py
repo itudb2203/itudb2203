@@ -1,4 +1,4 @@
-from flask import render_template, current_app, request
+from flask import render_template, current_app, request, redirect, url_for
 from math import ceil
 from hall_of_fame import HallOfFame
 
@@ -22,12 +22,12 @@ def hall_of_fame_page(player_ID):
     hof = myDB.get_hall_of_fame(player_ID)
     return render_template("hall_of_fame.html", player_name=player_name, player_ID=player_ID, hall_of_fame=hof)
 
-def del_hall_of_fame(player_ID, yearid):
+def del_hall_of_fame(player_ID, yearid, votedBy):
     myDB = current_app.config["dbconfig"]
-    myDB.del_hall_of_fame(player_ID, yearid)
-    return hall_of_fame_page(player_ID)
+    myDB.del_hall_of_fame(player_ID, yearid, votedBy)
+    return redirect(url_for('hall_of_fame_page', player_ID=player_ID))
 
-def update_hall_of_fame(player_ID, yearid):
+def update_hall_of_fame(player_ID, yearid, votedBy):
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
@@ -41,9 +41,9 @@ def update_hall_of_fame(player_ID, yearid):
 
         updated_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
 
-        myDB.update_hall_of_fame(player_ID, yearid, updated_hof)
+        myDB.update_hall_of_fame(player_ID, yearid, votedBy, updated_hof)
 
-    return hall_of_fame_page(player_ID)
+    return redirect(url_for('hall_of_fame_page', player_ID=player_ID))
 
 def add_hall_of_fame(player_ID):
     if request.method == "POST":
@@ -61,4 +61,4 @@ def add_hall_of_fame(player_ID):
 
         myDB.add_hall_of_fame(player_ID, new_hof)
 
-    return hall_of_fame_page(player_ID)
+    return redirect(url_for('hall_of_fame_page', player_ID=player_ID))

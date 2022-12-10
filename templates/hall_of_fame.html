@@ -36,8 +36,8 @@
                    data-bs-yearid="{{hall_of_fame[i].yearid}}" data-bs-category="{{hall_of_fame[i].category}}"
                    data-bs-votedBy="{{hall_of_fame[i].votedBy}}" data-bs-ballots="{{hall_of_fame[i].ballots}}"
                    data-bs-needed="{{hall_of_fame[i].needed}}" data-bs-votes="{{hall_of_fame[i].votes}}" data-bs-title="Update Hall of Fame Data"
-                   data-bs-url="{{url_for('update_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid) }}">Update</a>
-                <a class="dropdown-item" href="{{ url_for('del_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid) }}">Delete</a>
+                   data-bs-url="{{url_for('update_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Update</a>
+                <a class="dropdown-item" href="{{url_for('del_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Delete</a>
               </div>
             </div>
           </td>
@@ -84,7 +84,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save changes</button>
+              <button type="submit" class="btn btn-primary">Save</button>
             </div>
           </form>
         </div>
