@@ -28,11 +28,11 @@
 
 <div class="col-xl">
   <ul class="pagination justify-content-center mt-5">
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitching_page', playerID=pitchings[0].playerID, page_num=1) }}"> << </a> </li>
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitching_page', playerID=pitchings[0].playerID,page_num=(1, cur_page - 1)|max) }}"> < </a> </li>
+    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID, page_num=1) }}"> << </a> </li>
+    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID,page_num=(1, cur_page - 1)|max) }}"> < </a> </li>
     <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitching_page', playerID=pitchings[0].playerID,page_num=(num_of_pages, cur_page + 1)|min) }}"> > </a></li>
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitching_page', playerID=pitchings[0].playerID,page_num=num_of_pages) }}"> >> </a></li>
+    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID,page_num=(num_of_pages, cur_page + 1)|min) }}"> > </a></li>
+    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID,page_num=num_of_pages) }}"> >> </a></li>
   </ul>
 </div>
 

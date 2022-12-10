@@ -13,6 +13,7 @@ def create_app():
     app.add_url_rule("/players/<page_num>", view_func=views.players_page)
     app.add_url_rule("/player/<player_ID>", view_func=views.player_stats_page)
     app.add_url_rule("/pitchings/<string:playerID>/<int:page_num>", view_func=views.pitchings_page)
+    app.add_url_rule("/pitchingsdetail/<string:playerID>/<int:page_num>", view_func=views.pitchings_detail_page)
 
     home_dir = os.getcwd()
 

@@ -1,5 +1,6 @@
 import sqlite3 as dbapi2
 from pitching import Pitching
+from pitchingDetail import PitchingDetail
 from player import Player
 
 
@@ -54,6 +55,21 @@ class Database:
             cursor.close()
             return pitchings
 
+    def get_pitchings_detail_by_playerID(self, playerID, page_num):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT playerID, Pitching.yearID, stint, name, Pitching.lgID, Pitching.W, Pitching.L FROM Pitching
+            JOIN Teams ON Pitching.teamID=Teams.teamID
+            WHERE playerID = ?
+            LIMIT 10 OFFSET ?"""
+            cursor.execute(query, (playerID, (int(page_num) - 1) * 10,))
+            pitchings = []
+            for playerID, yearID, stint, name, lgID, W, L in cursor:
+                pitchings.append(
+                    PitchingDetail(playerID, yearID, stint, name, lgID, W, L))
+            cursor.close()
+            return pitchings
+
     def get_num_of_pitchings_by_playerID(self, playerID):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
@@ -63,3 +79,21 @@ class Database:
             num_of_pitchings = cursor.fetchone()[0]
             cursor.close()
             return num_of_pitchings
+
+    def delete_pitchings_by_playerID(self, playerID):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM Pitching
+            WHERE playerID = ?"""
+            cursor.execute(query, (playerID,))
+            cursor.close()
+
+    def add_pitching(self, pitching):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO Pitching 
+            (playerID, yearid, stint, teamID, lgID, W, L)
+            VALUES (?, ?,?,?,?,?,? )"""
+            cursor.execute(query, (pitching.playerID, pitching.yearID, pitching.stint,
+                           pitching.teamID, pitching.lgID, pitching.w, pitching.l,))
+            cursor.close()

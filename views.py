@@ -24,3 +24,10 @@ def pitchings_page(playerID, page_num):
     pitchings = myDB.get_pitchings_by_playerID(playerID, page_num)
     num_of_pages = ceil(myDB.get_num_of_pitchings_by_playerID(playerID) / 10)
     return render_template("pitchings.html", pitchings=pitchings, cur_page=int(page_num), num_of_pages=num_of_pages)
+
+
+def pitchings_detail_page(playerID, page_num):
+    myDB = current_app.config["dbconfig"]
+    pitchings = myDB.get_pitchings_detail_by_playerID(playerID, page_num)
+    num_of_pages = ceil(myDB.get_num_of_pitchings_by_playerID(playerID) / 10)
+    return render_template("pitchings_detail.html", pitchings=pitchings, cur_page=int(page_num), num_of_pages=num_of_pages)
