@@ -2,7 +2,7 @@
 {% block title %}{% endblock %}
 {% block content %}
 
-    {% if error %}
+    {% if error == 'True' %}
       <div class="d-grid gap-2 col-5 mx-auto">
         <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
           You should enter a valid data.

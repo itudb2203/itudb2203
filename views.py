@@ -25,10 +25,10 @@ def hall_of_fame_page(player_ID, error):
 def del_hall_of_fame(player_ID, yearid, votedBy):
     myDB = current_app.config["dbconfig"]
     myDB.del_hall_of_fame(player_ID, yearid, votedBy)
-    return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=False))
+    return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error='False'))
 
 def update_hall_of_fame(player_ID, yearid, votedBy):
-    error = False
+    error = 'False'
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
@@ -45,12 +45,12 @@ def update_hall_of_fame(player_ID, yearid, votedBy):
 
             myDB.update_hall_of_fame(player_ID, yearid, votedBy, updated_hof)
         except:
-            error = True
+            error = 'True'
 
     return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=error))
 
 def add_hall_of_fame(player_ID):
-    error = False
+    error = 'False'
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
@@ -67,6 +67,6 @@ def add_hall_of_fame(player_ID):
 
             myDB.add_hall_of_fame(player_ID, new_hof)
         except:
-            error = True
+            error = 'True'
 
     return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=error))
