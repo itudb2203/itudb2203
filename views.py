@@ -16,18 +16,19 @@ def player_stats_page(player_ID):
     player_name = myDB.get_player_name(player_ID)
     return render_template("player_stats.html", player_name=player_name, player_ID=player_ID)
 
-def hall_of_fame_page(player_ID):
+def hall_of_fame_page(player_ID, error):
     myDB = current_app.config["dbconfig"]
     player_name = myDB.get_player_name(player_ID)
     hof = myDB.get_hall_of_fame(player_ID)
-    return render_template("hall_of_fame.html", player_name=player_name, player_ID=player_ID, hall_of_fame=hof)
+    return render_template("hall_of_fame.html", player_name=player_name, player_ID=player_ID, hall_of_fame=hof, error=error)
 
 def del_hall_of_fame(player_ID, yearid, votedBy):
     myDB = current_app.config["dbconfig"]
     myDB.del_hall_of_fame(player_ID, yearid, votedBy)
-    return redirect(url_for('hall_of_fame_page', player_ID=player_ID))
+    return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=False))
 
 def update_hall_of_fame(player_ID, yearid, votedBy):
+    error = False
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
@@ -37,15 +38,19 @@ def update_hall_of_fame(player_ID, yearid, votedBy):
         ballots_updated = request.form.get("ballots")
         needed_updated = request.form.get("needed")
         votes_updated = request.form.get("votes")
-        inducted_updated = "N" if int(votes_updated) < int(needed_updated) else "Y"
+        try:
+            inducted_updated = "N" if int(votes_updated) < int(needed_updated) else "Y"
 
-        updated_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
+            updated_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
 
-        myDB.update_hall_of_fame(player_ID, yearid, votedBy, updated_hof)
+            myDB.update_hall_of_fame(player_ID, yearid, votedBy, updated_hof)
+        except:
+            error = True
 
-    return redirect(url_for('hall_of_fame_page', player_ID=player_ID))
+    return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=error))
 
 def add_hall_of_fame(player_ID):
+    error = False
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
@@ -55,10 +60,13 @@ def add_hall_of_fame(player_ID):
         ballots_new = request.form.get("ballots")
         needed_new = request.form.get("needed")
         votes_new = request.form.get("votes")
-        inducted_new = "N" if int(votes_new) < int(needed_new) else "Y"
+        try:
+            inducted_new = "N" if int(votes_new) < int(needed_new) else "Y"
 
-        new_hof = HallOfFame(yearid_new, votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
+            new_hof = HallOfFame(yearid_new, votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
 
-        myDB.add_hall_of_fame(player_ID, new_hof)
+            myDB.add_hall_of_fame(player_ID, new_hof)
+        except:
+            error = True
 
-    return redirect(url_for('hall_of_fame_page', player_ID=player_ID))
+    return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=error))

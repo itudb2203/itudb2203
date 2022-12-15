@@ -2,6 +2,15 @@
 {% block title %}{% endblock %}
 {% block content %}
 
+    {% if error %}
+      <div class="d-grid gap-2 col-5 mx-auto">
+        <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
+          You should enter a valid data.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endif %}
+
     {% if hall_of_fame %}
       <h3 class="display-5 text-center mb-3 text-dark" > Hall of Fame </h3>
       <table class="table is-striped is-fullwidth table-hover table-bordered">
