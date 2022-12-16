@@ -10,7 +10,11 @@ def create_app():
     app.config.from_object("settings")
 
     app.add_url_rule("/", view_func=views.home_page)
-    app.add_url_rule("/players/<page_num>", view_func=views.players_page)
+    app.add_url_rule("/players/<page_num>/error:<error>", view_func=views.players_page)
+    app.add_url_rule("/players/<page_num>/delete/<playerID>", view_func=views.del_player)
+    app.add_url_rule("/players/<page_num>/update/<playerID>", methods=["GET", "POST"], view_func=views.update_player)
+    app.add_url_rule("/players/<page_num>/add", methods=["GET", "POST"], view_func=views.add_player)
+    app.add_url_rule("/player/<playerID>", view_func=views.player_stats_page)
 
     home_dir = os.getcwd()
 
