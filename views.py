@@ -64,9 +64,9 @@ def add_player(page_num):
         height_new = request.form.get("height")
 
         # We will autogenerate id for the new player.
-        # PlayerID format : last name's first 5 letter (if less, take the whole string) + first name's first 5 letter + index
-        # It's in lower case. index has a length of 2. If it's a single digit integer, there's a 0 in the front. Index
-        # is incremented if there exists a player with the same id
+        # PlayerID format : last name's first 5 letter (if less, take the whole string) + first name's first 2 letter + index
+        # It's in lower case. index has a length of 2. If it's a single digit integer, there's a 0 in the front.
+        # Index is incremented if there exists a player with the same id
         id_lname_len = min(4, len(nameLast_new))  # Length of last name's part in the id
         id_fname_len = min(2, len(nameFirst_new))  # Length of first name's part in the id
         id_lname = nameLast_new[:id_lname_len]  # Last name's part in the id
