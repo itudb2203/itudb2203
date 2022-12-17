@@ -40,8 +40,8 @@ def update_player(page_num, playerID):
         weight_updated = request.form.get("weight")
         height_updated = request.form.get("height")
         try:
-            updated_player = Player(playerID, nameFirst_updated, nameLast_updated, birthYear_updated,
-                                    birthCountry_updated, weight_updated, height_updated)
+            updated_player = Player(playerID, nameFirst_updated, nameLast_updated, int(birthYear_updated),
+                                    birthCountry_updated, int(weight_updated), int(height_updated))
 
             myDB.update_player(playerID, updated_player)
 
@@ -84,8 +84,8 @@ def add_player(page_num):
                 else:
                     id_ind += 1  # If there's continue increasing index
 
-            new_player = Player(playerID_new, nameFirst_new, nameLast_new, birthYear_new, birthCountry_new, weight_new,
-                                height_new)
+            new_player = Player(playerID_new, nameFirst_new, nameLast_new, int(birthYear_new), birthCountry_new, int(weight_new),
+                                int(height_new))
 
             myDB.add_player(new_player)
             
@@ -127,7 +127,7 @@ def update_hall_of_fame(playerID, yearid, votedBy):
             if (int(ballots_updated) < int(needed_updated)) or (int(ballots_updated) < int(votes_updated)):
                 raise Exception
 
-            updated_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
+            updated_hof = HallOfFame(int(yearid_updated), votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
 
             myDB.update_hall_of_fame(playerID, yearid, votedBy, updated_hof)
 
@@ -154,7 +154,7 @@ def add_hall_of_fame(playerID):
             if (int(ballots_new) < int(needed_new)) or (int(ballots_new) < int(votes_new)):
                 raise Exception
 
-            new_hof = HallOfFame(yearid_new, votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
+            new_hof = HallOfFame(int(yearid_new), votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
 
             myDB.add_hall_of_fame(playerID, new_hof)
 
