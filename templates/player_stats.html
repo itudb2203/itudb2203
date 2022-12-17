@@ -4,11 +4,13 @@
 
     <div class="d-grid gap-2 col-7 mx-auto ">
         <a class="btn btn-outline-primary btn-lg mb-2"> Appearances </a>
-        <a class="btn btn-outline-primary btn-lg mb-2"> Batting </a>
+        <a class="btn btn-outline-primary btn-lg mb-2" href="{{ url_for('batting_page', playerID=playerID, error='False') }}"> Batting </a>
         <a class="btn btn-outline-primary btn-lg mb-2"> Fielding </a>
         <a class="btn btn-outline-primary btn-lg mb-2"> Pitching </a>
         <a class="btn btn-outline-primary btn-lg mb-2"> Hall of Fame </a>
     </div>
+
+
 
 
 {% endblock %}

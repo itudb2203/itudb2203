@@ -1,0 +1,142 @@
+{% extends "layout_player.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+
+    {% if error == 'True' %}
+      <div class="d-grid gap-2 col-5 mx-auto">
+        <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
+          You should enter a valid data.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endif %}
+
+
+    {% if batting %}
+      <h3 class="display-5 text-center mb-3 text-dark" > Batting </h3>
+      <table class="table is-striped is-fullwidth table-hover">
+        <tr>
+        <th>#</th>
+        <th>playerID</th>
+        <th>yearID</th>
+        <th>teamID</th>
+        <th>lgID</th>
+        <th>R</th>
+        <th>G</th>
+
+        </tr>
+        {% for i in range(batting|length)%}
+        <tr class="align-middle">
+          <td>{{ i + 1 }}</td>
+          <td>{{ batting[i].playerID }}</td>
+          <td>{{ batting[i].yearid }}</td>
+          <td>{{ batting[i].teamID }}</td>
+          <td>{{ batting[i].lgID }}</td>
+          <td>{{ batting[i].R }}</td>
+          <td>{{ batting[i].G }}</td>
+          <td>
+             <div class="dropdown show">
+              <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Operations
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#BaTModal"
+                   data-bs-playerID="{{batting[i].playerID}}" data-bs-yearid="{{batting[i].yearid}}"
+                   data-bs-teamID="{{batting[i].teamID}}" data-bs-lgID="{{batting[i].lgID}}"
+                   data-bs-R="{{batting[i].R}}" data-bs-G="{{batting[i].G}}" data-bs-title="Update Batting Data"
+                   data-bs-url="{{url_for('update_batting', playerID = playerID , yearid = batting[i].yearid )}}">Update</a>
+                <a class="dropdown-item" href="{{url_for('del_batting', playerID = playerID, yearid = batting[i].yearid)}}">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <h3 class="display-6 text-center mb-3 text-dark" > The player has no batting data.</h3>
+    {% endif %}
+
+<div class="modal fade" id="BaTModal" tabindex="-1" aria-labelledby="BaTModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="BaTModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="post" id="formBaT">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="yearid" class="col-form-label">Year ID:</label>
+                <input type="text" class="form-control" id="yearid" name="yearid">
+              </div>
+              <div class="mb-3">
+                <label for="teamID" class="col-form-label">Team ID:</label>
+                <input type="text" class="form-control" id="teamID" name="teamID">
+              </div>
+              <div class="mb-3">
+                <label for="lgID" class="col-form-label">LG ID:</label>
+                <input type="text" class="form-control" id="lgID" name="lgID">
+              </div>
+              <div class="mb-3">
+                <label for="R" class="col-form-label">R:</label>
+                <input type="text" class="form-control" id="R" name="R">
+              </div>
+              <div class="mb-3">
+                <label for="G" class="col-form-label">G:</label>
+                <input type="text" class="form-control" id="g" name="g">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="d-grid gap-2 col-5 mx-auto ">
+      <a class="btn btn-success text-center btn-lg mt-4" data-bs-toggle="modal" data-bs-target="#BaTModal" data-bs-title="Add Batting Data"
+         data-bs-url="{{url_for('add_batting', playerID = playerID)}}"> Add Batting Data </a>
+    </div>
+
+    <script type="text/javascript">
+      var BaTModal = document.getElementById('BaTModal')
+      BaTModal.addEventListener('show.bs.modal', function (event) {
+
+        var button = event.relatedTarget
+
+        var playerID = button.getAttribute('data-bs-playerID')
+        var yearid = button.getAttribute('data-bs-yearid')
+        var teamID = button.getAttribute('data-bs-teamID')
+        var lgID = button.getAttribute('data-bs-lgID')
+        var R = button.getAttribute('data-bs-R')
+        var G = button.getAttribute('data-bs-G')
+        var title = button.getAttribute('data-bs-title')
+        var url = button.getAttribute('data-bs-url')
+
+        var modalplayerID = BaTModal.querySelector('#playerID')
+        var modalyearid = BaTModal.querySelector('#yearid')
+        var modalteamID = BaTModal.querySelector('#teamID')
+        var modallgID = BaTModal.querySelector('#lgID')
+        var modalR = BaTModal.querySelector('#R')
+        var modalG = BaTModal.querySelector('#G')
+        var modalTitle = BaTModal.querySelector('#BaTModalLabel')
+        var modalForm = BaTModal.querySelector('#formBaT')
+
+        modalplayerID.value = playerID
+        modalyearid.value = yearid
+        modalteamID.value = teamID
+        modallgID.value = lgID
+        modalR.value = R
+        modalG.value = G
+        modalTitle.textContent = title
+        modalForm.action = url
+      })
+
+      if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+      }
+    </script>
+
+{% endblock %}
