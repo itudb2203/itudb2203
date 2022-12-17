@@ -18,6 +18,7 @@ def player_stats_page(playerID):
     player_name = myDB.get_player_name(playerID)
     return render_template("player_stats.html", player_name=player_name, playerID=playerID)
 
+
 def batting_page(playerID,error):
     myDB = current_app.config["dbconfig"]
     player_name = myDB.get_player_name(playerID)
@@ -29,13 +30,14 @@ def appearances_page(playerID,error):
     myDB = current_app.config["dbconfig"]
     player_name = myDB.get_player_name(playerID)
     app = myDB.get_appearances(playerID)
-    return render_template("appearances.html", player_name=player_name, playerID=playerID, appearance=app , error = error)
+    return render_template("appearances.html", player_name=player_name, playerID=playerID, appearances=app , error = error)
+
 
 def del_batting(playerID, yearid):
     myDB = current_app.config["dbconfig"]
     error = 'False'
     myDB.del_batting(playerID, yearid)
-    return batting_page(playerID,error)
+    return redirect(url_for('batting_page', playerID=playerID, error=error))
 
 def update_batting(playerID, yearid, teamID):
     error = 'False'
@@ -104,7 +106,7 @@ def del_appearances(playerID, yearid):
     myDB = current_app.config["dbconfig"]
     myDB.del_appearances(playerID, yearid)
     error = "False"
-    return appearances_page(playerID,error)
+    return redirect(url_for('appearances_page', playerID=playerID, error=error))
 
 
 

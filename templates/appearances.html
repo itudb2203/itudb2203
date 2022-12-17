@@ -13,7 +13,7 @@
     {% endif %}
 
 
-    {% if Appearances %}
+    {% if appearances %}
       <h3 class="display-5 text-center mb-3 text-dark" > Appearances </h3>
       <table class="table is-striped is-fullwidth table-hover">
         <tr>
@@ -21,21 +21,19 @@
         <th>yearID</th>
         <th>teamID</th>
         <th>lgID</th>
-        <th>playerID</th>
         <th>GS</th>
           <th>G_batting</th>
         <th>G_p</th>
         </tr>
-        {% for i in range(Appearances|length)%}
+        {% for i in range(appearances|length)%}
         <tr class="align-middle">
           <td>{{ i + 1 }}</td>
-          <td>{{ Appearances[i].yearid }}</td>
-          <td>{{ Appearances[i].teamID }}</td>
-          <td>{{ Appearances[i].lgID }}</td>
-          <td>{{ Appearances[i].playerID }}</td>
-          <td>{{ Appearances[i].GS }}</td>
-          <td>{{ Appearances[i].G_batting }}</td>
-          <td>{{ Appearances[i].G_p }}</td>
+          <td>{{ appearances[i].yearid }}</td>
+          <td>{{ appearances[i].teamID }}</td>
+          <td>{{ appearances[i].lgID }}</td>
+          <td>{{ appearances[i].GS }}</td>
+          <td>{{ appearances[i].G_batting }}</td>
+          <td>{{ appearances[i].G_p }}</td>
           <td>
              <div class="dropdown show">
               <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -45,7 +43,7 @@
                 <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#AppModal"
                    data-bs-yearid="{{appearances[i].yearid}}"
                    data-bs-teamID="{{appearances[i].teamID}}" data-bs-lgID="{{appearances[i].lgID}}"
-                   data-bs-playerID="{{appearances[i].playerID}}" data-bs-GS="{{appearances[i].GS}} " data-bs-G_batting="{{appearances[i].G_batting}}"
+                    data-bs-GS="{{appearances[i].GS}} " data-bs-G_batting="{{appearances[i].G_batting}}"
                     data-bs-G_p="{{appearances[i].G_p}}" data-bs-title="Update Appearances Data"
                    data-bs-url="{{url_for('update_appearances', playerID = playerID , yearid = appearances[i].yearid, teamID = appearances[i].teamID)}}">Update</a>
                 <a class="dropdown-item" href="{{url_for('del_appearances', playerID = playerID, yearid = appearances[i].yearid)}}">Delete</a>
