@@ -97,3 +97,13 @@ class Database:
             cursor.execute(query, (pitching.playerID, pitching.yearID, pitching.stint,
                            pitching.teamID, pitching.lgID, pitching.w, pitching.l,))
             cursor.close()
+
+    def update_pitching(self, pitching):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE Pitching
+            SET stint = ?, teamID = ?, lgID =? ,w=?, l=?
+            WHERE playerID = ?, yearid = ?"""
+            cursor.execute(query, (pitching.stint, pitching.teamID, pitching.lgID,
+                           pitching.w, pitching.l, pitching.playerID, pitching.yearID,))
+            cursor.close()
