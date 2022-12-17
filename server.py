@@ -26,7 +26,13 @@ def create_app():
     app.add_url_rule("/player/<playerID>/hall-of-fame/delete/<yearid>/<votedBy>", view_func=views.del_hall_of_fame)
     app.add_url_rule("/player/<playerID>/hall-of-fame/update/<yearid>/<votedBy>", methods=["GET", "POST"], view_func=views.update_hall_of_fame)
     app.add_url_rule("/player/<playerID>/hall-of-fame/add", methods=["GET", "POST"], view_func=views.add_hall_of_fame)
-    app.add_url_rule("/teams/<page_num>", view_func=views.teams_page)
+
+    # Teams page url's
+    app.add_url_rule("/teams/<page_num>/", view_func=views.teams_page)
+    app.add_url_rule("/teams/<page_num>/error:<error>", view_func=views.teams_page)
+    #app.add_url_rule("/teams/<page_num>/delete/<teamID>", view_func=views.del_team)
+    #app.add_url_rule("/teams/<page_num>/update/<teamID>", methods=["GET", "POST"], view_func=views.update_team)
+    #app.add_url_rule("/teams/<page_num>/add", methods=["GET", "POST"], view_func=views.add_team)
 
     home_dir = os.getcwd()
 

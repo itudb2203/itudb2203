@@ -145,8 +145,9 @@ def add_hall_of_fame(playerID):
 
     return redirect(url_for('hall_of_fame_page', playerID=playerID, error=error))
 
-def teams_page(page_num):
+def teams_page(page_num,error):
     myDB = current_app.config["dbconfig"]
     teams_list = myDB.get_teams(page_num)
     num_of_pages = ceil(myDB.get_num_teams() / 10)
-    return render_template("teams.html", teams=teams_list, cur_page = int(page_num), num_pages = num_of_pages)
+    return render_template("teams.html", teams=teams_list, cur_page = int(page_num), num_pages = num_of_pages,
+                           error=error)

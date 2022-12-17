@@ -2,22 +2,35 @@
 {% block title %}Teams{% endblock %}
 {% block content %}
 
+
     <h3 class="display-5 text-center mb-3 text-dark" > Teams </h3>
-    <table class="table is-striped is-fullwidth table-hover">
-      <tr>
-      <th>#</th>
-      <th>Team ID</th>
-      <th>Year</th>
-      <th>Team Name</th>
-      <th>Team Rank</th>
-      <th>League Win</th>
-      <th>Games</th>
-      <th>Wins</th>
-      <th>Losses</th>
-      <th>Runs</th>
-      <th>Errors</th>
-      <th>Park</th>
-      </tr>
+
+    {% if error == 'True' %}
+      <div class="d-grid gap-2 col-5 mx-auto">
+        <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
+          You should enter a valid data.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endif %}
+
+    <table class="table is-striped is-fullwidth table-hover table-bordered">
+        <thead class="table-light">
+            <tr>
+            <th>#</th>
+            <th>Team ID</th>
+            <th>Year</th>
+            <th>Team Name</th>
+            <th>Team Rank</th>
+            <th>League Win</th>
+            <th>Games</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Runs</th>
+            <th>Errors</th>
+            <th>Park</th>
+            </tr>
+        </thead>
       {% for i in range(teams|length)%}
       <tr>
         <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
@@ -32,17 +45,18 @@
         <td>{{ teams[i].R }}</td>
         <td>{{ teams[i].E }}</td>
         <td>{{ teams[i].park }}</td>
+
       </tr>
       {% endfor %}
     </table>
 
     <div class="col-xl">
         <ul class="pagination justify-content-center mt-5">
-          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=1) }}"> << </a> </li>
-          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=(1, cur_page - 1)|max) }}"> < </a> </li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=1, error='False') }}"> << </a> </li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=(1, cur_page - 1)|max, error='False') }}"> < </a> </li>
           <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
-          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=(num_pages, cur_page + 1)|min) }}"> > </a></li>
-          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=284) }}"> >> </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=(num_pages, cur_page + 1)|min, error='False') }}"> > </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('teams_page', page_num=num_pages, error='False') }}"> >> </a></li>
         </ul>
       </div>
 
