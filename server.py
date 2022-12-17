@@ -10,11 +10,22 @@ def create_app():
     app.config.from_object("settings")
 
     app.add_url_rule("/", view_func=views.home_page)
+
+    # Players page url's
+    app.add_url_rule("/players/<page_num>", view_func=views.players_page)
     app.add_url_rule("/players/<page_num>/error:<error>", view_func=views.players_page)
     app.add_url_rule("/players/<page_num>/delete/<playerID>", view_func=views.del_player)
     app.add_url_rule("/players/<page_num>/update/<playerID>", methods=["GET", "POST"], view_func=views.update_player)
     app.add_url_rule("/players/<page_num>/add", methods=["GET", "POST"], view_func=views.add_player)
-    app.add_url_rule("/player/<playerID>", view_func=views.player_stats_page)
+    
+    # Player stats page url
+    app.add_url_rule("/player/<player_ID>", view_func=views.player_stats_page)
+    
+    # Hall of fame page url's
+    app.add_url_rule("/player/<player_ID>/hall-of-fame/error:<error>", view_func=views.hall_of_fame_page)
+    app.add_url_rule("/player/<player_ID>/hall-of-fame/delete/<yearid>/<votedBy>", view_func=views.del_hall_of_fame)
+    app.add_url_rule("/player/<player_ID>/hall-of-fame/update/<yearid>/<votedBy>", methods=["GET", "POST"], view_func=views.update_hall_of_fame)
+    app.add_url_rule("/player/<player_ID>/hall-of-fame/add", methods=["GET", "POST"], view_func=views.add_hall_of_fame)
 
     home_dir = os.getcwd()
 

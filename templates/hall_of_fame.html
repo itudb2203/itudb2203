@@ -1,0 +1,147 @@
+{% extends "layout_player.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+    {% if error == 'True' %}
+      <div class="d-grid gap-2 col-5 mx-auto">
+        <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
+          You should enter a valid data.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endif %}
+
+    {% if hall_of_fame %}
+      <h3 class="display-5 text-center mb-3 text-dark" > Hall of Fame </h3>
+      <table class="table is-striped is-fullwidth table-hover table-bordered">
+        <thead class="table-light">
+          <tr>
+          <th>#</th>
+          <th>Year</th>
+          <th>Category</th>
+          <th>Voting Method</th>
+          <th>Total Cast Ballots</th>
+          <th>Votes Needed</th>
+          <th>Votes Received</th>
+          <th>Inducted</th>
+          <th>Operations</th>
+          </tr>
+        </thead>
+        {% for i in range(hall_of_fame|length)%}
+        <tr class="align-middle">
+          <td>{{ i + 1 }}</td>
+          <td>{{ hall_of_fame[i].yearid }}</td>
+          <td>{{ hall_of_fame[i].category }}</td>
+          <td>{{ hall_of_fame[i].votedBy }}</td>
+          <td>{{ hall_of_fame[i].ballots }}</td>
+          <td>{{ hall_of_fame[i].needed }}</td>
+          <td>{{ hall_of_fame[i].votes }}</td>
+          <td>{{ "Yes" if hall_of_fame[i].inducted == "Y" else "No" }}</td>
+          <td>
+            <div class="dropdown show">
+              <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Operations
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#hofModal"
+                   data-bs-yearid="{{hall_of_fame[i].yearid}}" data-bs-category="{{hall_of_fame[i].category}}"
+                   data-bs-votedBy="{{hall_of_fame[i].votedBy}}" data-bs-ballots="{{hall_of_fame[i].ballots}}"
+                   data-bs-needed="{{hall_of_fame[i].needed}}" data-bs-votes="{{hall_of_fame[i].votes}}" data-bs-title="Update Hall of Fame Data"
+                   data-bs-url="{{url_for('update_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Update</a>
+                <a class="dropdown-item" href="{{url_for('del_hall_of_fame', player_ID = player_ID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+
+    {% else %}
+      <h3 class="display-6 text-center mb-3 text-dark"> The player has no hall of fame data.</h3>
+    {% endif %}
+    <div class="modal fade" id="hofModal" tabindex="-1" aria-labelledby="hofModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="hofModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="post" id="formHof">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="yearid" class="col-form-label">Year:</label>
+                <input type="text" class="form-control" id="yearid" name="yearid">
+              </div>
+              <div class="mb-3">
+                <label for="category" class="col-form-label">Category:</label>
+                <input type="text" class="form-control" id="category" name="category">
+              </div>
+              <div class="mb-3">
+                <label for="votedBy" class="col-form-label">Voting Method:</label>
+                <input type="text" class="form-control" id="votedBy" name="votedBy">
+              </div>
+              <div class="mb-3">
+                <label for="ballots" class="col-form-label">Total Cast Ballots:</label>
+                <input type="text" class="form-control" id="ballots" name="ballots">
+              </div>
+              <div class="mb-3">
+                <label for="needed" class="col-form-label">Votes Needed:</label>
+                <input type="text" class="form-control" id="needed" name="needed">
+              </div>
+              <div class="mb-3">
+                <label for="votes" class="col-form-label">Votes Received:</label>
+                <input type="text" class="form-control" id="votes" name="votes">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="d-grid gap-2 col-5 mx-auto ">
+      <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#hofModal" data-bs-title="Add Hall of Fame Data"
+         data-bs-url="{{url_for('add_hall_of_fame', player_ID = player_ID)}}"> Add Hall of Fame Data </a>
+    </div>
+
+    <script type="text/javascript">
+      var hofModal = document.getElementById('hofModal')
+      hofModal.addEventListener('show.bs.modal', function (event) {
+
+        var button = event.relatedTarget
+
+        var yearid = button.getAttribute('data-bs-yearid')
+        var category = button.getAttribute('data-bs-category')
+        var votedBy = button.getAttribute('data-bs-votedBy')
+        var ballots = button.getAttribute('data-bs-ballots')
+        var needed = button.getAttribute('data-bs-needed')
+        var votes = button.getAttribute('data-bs-votes')
+        var title = button.getAttribute('data-bs-title')
+        var url = button.getAttribute('data-bs-url')
+
+        var modalYearid = hofModal.querySelector('#yearid')
+        var modalCategory = hofModal.querySelector('#category')
+        var modalVotedBy = hofModal.querySelector('#votedBy')
+        var modalBallots = hofModal.querySelector('#ballots')
+        var modalNeeded = hofModal.querySelector('#needed')
+        var modalVotes = hofModal.querySelector('#votes')
+        var modalTitle = hofModal.querySelector('#hofModalLabel')
+        var modalForm = hofModal.querySelector('#formHof')
+
+        modalYearid.value = yearid
+        modalCategory.value = category
+        modalVotedBy.value = votedBy
+        modalBallots.value = ballots
+        modalNeeded.value = needed
+        modalVotes.value = votes
+        modalTitle.textContent = title
+        modalForm.action = url
+      })
+
+      if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+      }
+    </script>
+{% endblock %}
