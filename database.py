@@ -137,12 +137,12 @@ class Database:
         teams_list = []
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """SELECT teamID, yearID, name, Rank, LgWin, G, W, L, R, E, park FROM Teams
-            ORDER BY teamID,yearID
+            query = """SELECT yearID, lgID, teamID, name, Rank, LgWin, G, W, L, R, E, park FROM Teams
+            ORDER BY yearID,lgID,teamID
             LIMIT 10 OFFSET ?"""
             cursor.execute(query, ((int(page_num) - 1) * 10,))
-            for teamID, yearID, name, Rank, LgWin, G, W, L, R, E, park in cursor:
-                teams_list.append(Team(teamID, yearID, name, Rank, LgWin, G, W, L, R, E, park))
+            for yearID, lgID, teamID, name, Rank, LgWin, G, W, L, R, E, park in cursor:
+                teams_list.append(Team(yearID, lgID, teamID, name, Rank, LgWin, G, W, L, R, E, park))
             cursor.close()
         return teams_list
     def get_num_teams(self):
@@ -154,19 +154,20 @@ class Database:
             cursor.close()
             return num_of_teams
 
-    def del_team(self, teamID):
+    def del_team(self, yearID, lgID, teamID):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = "DELETE FROM Teams WHERE teamID = ?"
-            cursor.execute(query, (teamID,))
+            query = "DELETE FROM Teams WHERE (yearID = ? AND lgID = ? AND teamID = ?)"
+            cursor.execute(query, (yearID, lgID, teamID))
             cursor.close()
 
-    def update_team(self, teamID, updated_team):
+    def update_team(self, yearID, lgID, teamID, updated_team):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
             query = """UPDATE Teams
-            SET teamID = ?,
-                yearID = ?,
+            SET yearID = ?,
+                lgID = ?,
+                teamID = ?,
                 name = ?,
                 Rank = ?,
                 LgWin = ?,
@@ -177,18 +178,18 @@ class Database:
                 E = ?,
                 park = ?
             WHERE
-                teamID = ?"""
+                (yearID = ? AND lgID = ? AND teamID = ?)"""
 
-            cursor.execute(query, (updated_team.teamID, updated_team.yearID, updated_team.name, updated_team.Rank,
-                                   updated_team.LgWin, updated_team.G, updated_team.W, updated_team.L, updated_team.R, updated_team.E, updated_team.park, teamID))
+            cursor.execute(query, (updated_team.yearID, updated_team.lgID, updated_team.teamID, updated_team.name, updated_team.Rank,
+                                   updated_team.LgWin, updated_team.G, updated_team.W, updated_team.L, updated_team.R, updated_team.E, updated_team.park, yearID, lgID, teamID))
             cursor.close()
 
     def add_team(self, new_team):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO Teams (teamID, yearID, name, Rank, LgWin, G, W, L, R, E, park)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+            query = """INSERT INTO Teams (yearID, lgID, teamID, name, Rank, LgWin, G, W, L, R, E, park)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
 
-            cursor.execute(query, (new_team.teamID, new_team.yearID, new_team.name, new_team.Rank,
+            cursor.execute(query, (new_team.yearID, new_team.lgID, new_team.teamID, new_team.name, new_team.Rank,
                                    new_team.LgWin, new_team.G, new_team.W, new_team.L, new_team.R, new_team.E, new_team.park))
             cursor.close()

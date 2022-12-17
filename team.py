@@ -1,7 +1,8 @@
 class Team:
-    def __init__(self, teamID,yearID, name, Rank, LgWin, G, W, L, R, E, park):
-        self.teamID = teamID
+    def __init__(self, yearID, lgID, teamID, name, Rank, LgWin, G, W, L, R, E, park):
         self.yearID = yearID
+        self.lgID = lgID
+        self.teamID = teamID
         self.name = name
         self.Rank = Rank
         self.LgWin = LgWin

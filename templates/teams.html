@@ -18,8 +18,9 @@
         <thead class="table-light">
             <tr>
             <th>#</th>
-            <th>Team ID</th>
             <th>Year</th>
+            <th>League</th>
+            <th>Team ID</th>
             <th>Team Name</th>
             <th>Team Rank</th>
             <th>League Win</th>
@@ -34,8 +35,9 @@
       {% for i in range(teams|length)%}
       <tr>
         <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
-        <td>{{ teams[i].teamID }}</td>
         <td>{{ teams[i].yearID }}</td>
+        <td>{{ teams[i].lgID }}</td>
+        <td>{{ teams[i].teamID }}</td>
         <td>{{ teams[i].name }}</td>
         <td>{{ teams[i].Rank }}</td>
         <td>{{ teams[i].LgWin }}</td>
@@ -52,14 +54,15 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">  <!-- Dropdown menu for operations -->
               <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#teamModal"
-                 data-bs-teamID="{{teams[i].teamID}}" data-bs-yearID="{{teams[i].yearID}}"
-                 data-bs-name="{{teams[i].name}}" data-bs-Rank="{{teams[i].Rank}}"
-                 data-bs-LgWin="{{teams[i].LgWin}}" data-bs-G="{{teams[i].G}}"
-                 data-bs-W="{{teams[i].W}}" data-bs-L="{{teams[i].L}}"
-                 data-bs-R="{{teams[i].R}}" data-bs-E="{{teams[i].E}}"
-                 data-bs-park="{{teams[i].park}}" data-bs-title="Update Team"
-                 data-bs-url="{{url_for('update_team', page_num=cur_page, teamID = teams[i].teamID)}}">Update</a>  <!-- Update button -->
-              <a class="dropdown-item" href="{{url_for('del_team', page_num=cur_page, teamID = teams[i].teamID, yearID = teams[i].yearID) }}">Delete</a>  <!-- Delete button -->
+                 data-bs-yearID="{{teams[i].yearID}}" data-bs-lgID="{{teams[i].lgID}}"
+                 data-bs-teamID="{{teams[i].teamID}}" data-bs-name="{{teams[i].name}}"
+                 data-bs-Rank="{{teams[i].Rank}}" data-bs-LgWin="{{teams[i].LgWin}}"
+                 data-bs-G="{{teams[i].G}}" data-bs-W="{{teams[i].W}}"
+                 data-bs-L="{{teams[i].L}}" data-bs-R="{{teams[i].R}}"
+                 data-bs-E="{{teams[i].E}}" data-bs-park="{{teams[i].park}}"
+                 data-bs-title="Update Team"
+                 data-bs-url="{{url_for('update_team', page_num=cur_page, yearID = teams[i].yearID, lgID = teams[i].lgID, teamID = teams[i].teamID)}}">Update</a>  <!-- Update button -->
+              <a class="dropdown-item" href="{{url_for('del_team', page_num=cur_page, yearID = teams[i].yearID, lgID = teams[i].lgID, teamID = teams[i].teamID)}}">Delete</a>  <!-- Delete button -->
 
             </div>
           </div>
@@ -77,12 +80,16 @@
           <form method="post" id="formTeam">
             <div class="modal-body">
               <div class="mb-3">
-                <label for="teamID" class="col-form-label">Team ID:</label>
-                <input type="text" class="form-control" id="teamID" name="teamID">
+                <label for="yearID" class="col-form-label">Year:</label>
+                <input type="text" class="form-control" id="yearID" name="yearID">
               </div>
               <div class="mb-3">
-                <label for="yearID" class="col-form-label">Year ID:</label>
-                <input type="text" class="form-control" id="yearID" name="yearID">
+                <label for="lgID" class="col-form-label">League:</label>
+                <input type="text" class="form-control" id="lgID" name="lgID">
+              </div>
+              <div class="mb-3">
+                <label for="teamID" class="col-form-label">Team ID:</label>
+                <input type="text" class="form-control" id="teamID" name="teamID">
               </div>
               <div class="mb-3">
                 <label for="name" class="col-form-label">Name:</label>
@@ -149,8 +156,9 @@
 
         var button = event.relatedTarget
 
-        var teamID = button.getAttribute('data-bs-teamID')
         var yearID = button.getAttribute('data-bs-yearID')
+        var lgID = button.getAttribute('data-bs-lgID')
+        var teamID = button.getAttribute('data-bs-teamID')
         var name = button.getAttribute('data-bs-name')
         var Rank = button.getAttribute('data-bs-Rank')
         var LgWin = button.getAttribute('data-bs-LgWin')
@@ -163,8 +171,9 @@
         var title = button.getAttribute('data-bs-title')
         var url = button.getAttribute('data-bs-url')
 
-        var modalTeamID = teamModal.querySelector('#teamID')
         var modalYearID = teamModal.querySelector('#yearID')
+        var modalLgID = teamModal.querySelector('#lgID')
+        var modalTeamID = teamModal.querySelector('#teamID')
         var modalName = teamModal.querySelector('#name')
         var modalRank = teamModal.querySelector('#Rank')
         var modalLgWin = teamModal.querySelector('#LgWin')
@@ -177,8 +186,9 @@
         var modalTitle = teamModal.querySelector('#teamModalLabel')
         var modalForm = teamModal.querySelector('#formTeam')
 
-        modalTeamID.value = teamID
         modalYearID.value = yearID
+        modalLgID.value = lgID
+        modalTeamID.value = teamID
         modalName.value = name
         modalRank.value = Rank
         modalLgWin.value = LgWin
