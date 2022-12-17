@@ -1,0 +1,151 @@
+{% extends "layout_player.html" %}
+{% block title %}{% endblock %}
+{% block content %}
+
+
+    {% if error == 'True' %}
+      <div class="d-grid gap-2 col-5 mx-auto">
+        <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
+          You should enter a valid data.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endif %}
+
+
+    {% if Appearances %}
+      <h3 class="display-5 text-center mb-3 text-dark" > Appearances </h3>
+      <table class="table is-striped is-fullwidth table-hover">
+        <tr>
+        <th>#</th>
+        <th>yearID</th>
+        <th>teamID</th>
+        <th>lgID</th>
+        <th>playerID</th>
+        <th>GS</th>
+          <th>G_batting</th>
+        <th>G_p</th>
+        </tr>
+        {% for i in range(Appearances|length)%}
+        <tr class="align-middle">
+          <td>{{ i + 1 }}</td>
+          <td>{{ Appearances[i].yearid }}</td>
+          <td>{{ Appearances[i].teamID }}</td>
+          <td>{{ Appearances[i].lgID }}</td>
+          <td>{{ Appearances[i].playerID }}</td>
+          <td>{{ Appearances[i].GS }}</td>
+          <td>{{ Appearances[i].G_batting }}</td>
+          <td>{{ Appearances[i].G_p }}</td>
+          <td>
+             <div class="dropdown show">
+              <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Operations
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#AppModal"
+                   data-bs-yearid="{{appearances[i].yearid}}"
+                   data-bs-teamID="{{appearances[i].teamID}}" data-bs-lgID="{{appearances[i].lgID}}"
+                   data-bs-playerID="{{appearances[i].playerID}}" data-bs-GS="{{appearances[i].GS}} " data-bs-G_batting="{{appearances[i].G_batting}}"
+                    data-bs-G_p="{{appearances[i].G_p}}" data-bs-title="Update Appearances Data"
+                   data-bs-url="{{url_for('update_appearances', playerID = playerID , yearid = appearances[i].yearid, teamID = appearances[i].teamID)}}">Update</a>
+                <a class="dropdown-item" href="{{url_for('del_appearances', playerID = playerID, yearid = appearances[i].yearid)}}">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <h3 class="display-6 text-center mb-3 text-dark" > The player has no Appearances data.</h3>
+    {% endif %}
+
+<div class="modal fade" id="AppModal" tabindex="-1" aria-labelledby="AppModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="AppModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="post" id="formApp">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="yearid" class="col-form-label">Year ID:</label>
+                <input type="text" class="form-control" id="yearid" name="yearid">
+              </div>
+              <div class="mb-3">
+                <label for="teamID" class="col-form-label">Team ID:</label>
+                <input type="text" class="form-control" id="teamID" name="teamID">
+              </div>
+              <div class="mb-3">
+                <label for="lgID" class="col-form-label">LG ID:</label>
+                <input type="text" class="form-control" id="lgID" name="lgID">
+              </div>
+              <div class="mb-3">
+                <label for="GS" class="col-form-label">GS:</label>
+                <input type="text" class="form-control" id="GS" name="GS">
+              </div>
+              <div class="mb-3">
+                <label for="G_batting" class="col-form-label">G_batting:</label>
+                <input type="text" class="form-control" id="G_batting" name="G_batting">
+              </div>
+              <div class="mb-3">
+                <label for="G_p" class="col-form-label">G_p:</label>
+                <input type="text" class="form-control" id="G_p" name="G_p">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="d-grid gap-2 col-5 mx-auto ">
+      <a class="btn btn-success text-center btn-lg mt-4" data-bs-toggle="modal" data-bs-target="#AppModal" data-bs-title="Add Appearances Data"
+         data-bs-url="{{url_for('add_appearances', playerID = playerID)}}"> Add Appearances Data </a>
+    </div>
+
+    <script type="text/javascript">
+      var AppModal = document.getElementById('AppModal')
+      AppModal.addEventListener('show.bs.modal', function (event) {
+
+        var button = event.relatedTarget
+
+        var yearid = button.getAttribute('data-bs-yearid')
+        var teamID = button.getAttribute('data-bs-teamID')
+        var lgID = button.getAttribute('data-bs-lgID')
+
+        var GS = button.getAttribute('data-bs-GS')
+        var G_batting = button.getAttribute('data-bs-G_batting')
+        var G_p = button.getAttribute('data-bs-G_p')
+        var title = button.getAttribute('data-bs-title')
+        var url = button.getAttribute('data-bs-url')
+
+
+
+        var modalyearid = BaTModal.querySelector('#yearid')
+        var modalteamID = BaTModal.querySelector('#teamID')
+        var modallgID = BaTModal.querySelector('#lgID')
+        var modalGS = BaTModal.querySelector('#GS')
+        var modalG_batting = BaTModal.querySelector('#G_batting')
+        var modalG_p = BaTModal.querySelector('#G_p')
+        var modalTitle = BaTModal.querySelector('#AppModalLabel')
+        var modalForm = BaTModal.querySelector('#formApp')
+
+        modalyearid.value = yearid
+        modalteamID.value = teamID
+        modallgID.value = lgID
+        modalGS.value = GS
+        modalG_batting.value = G_batting
+        modalG_p.value = G_p
+        modalTitle.textContent = title
+        modalForm.action = url
+      })
+
+      if ( window.history.replaceState ) {
+        window.history.replaceState( null, null, window.location.href );
+      }
+    </script>
+
+{% endblock %}

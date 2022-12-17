@@ -1,7 +1,7 @@
 import sqlite3 as dbapi2
 from player import Player
 from batting import Batting
-
+from appearances import Appearances
 
 class Database:
     def __init__(self, dbfile):
@@ -52,6 +52,7 @@ class Database:
             cursor.close()
             return batting_list
 
+
     def del_batting(self, playerID, yearid):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
@@ -87,4 +88,52 @@ class Database:
             VALUES (?, ?, ?, ?, ?, ? , ? , ? , ?);"""
 
             cursor.execute(query, (playerID, new_BaT.yearid, new_BaT.teamID, new_BaT.lgID, new_BaT.R, new_BaT.G,0,0,0))
+            cursor.close()
+
+    def get_appearances(self, playerID):
+        appearances_list = []
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT yearID, teamID, lgID, playerID , GS , G_batting , G_p FROM Appearances
+            WHERE playerID = ?
+            ORDER BY yearID"""
+            cursor.execute(query, (playerID,))
+            for yearid, teamID, lgID, playerID , GS , G_batting , G_p in cursor:
+                appearances_list.append(Appearances(yearid, teamID, lgID, playerID , GS , G_batting , G_p))
+            cursor.close()
+            return appearances_list
+
+    def del_appearances(self, playerID, yearid):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = "DELETE FROM appearances WHERE (playerID = ? AND yearID = ?)"
+            cursor.execute(query, (playerID, yearid))
+            cursor.close()
+
+    def update_appearances(self, playerID, yearid, teamID, updated_appearances):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+
+            query = """UPDATE appearances
+            SET yearID = ?,
+                teamID = ?,
+                lgID = ?,
+                GS = ?,
+                G_batting = ?,
+                G_p = ?,
+                
+            WHERE
+                (playerID = ? AND yearID = ? AND teamID = ?)"""
+
+            cursor.execute(query, (updated_appearances.yearid, updated_appearances.teamID, updated_appearances.lgID, updated_appearances.GS, updated_appearances.G_batting,updated_appearances.G_p, playerID, yearid, teamID))
+            cursor.close()
+
+
+    def add_appearances(self, playerID, new_App):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO batting (playerID, yearID, teamID, lgID, GS, G_batting , G_p)
+            VALUES (?, ?, ?, ?, ?, ? , ? );"""
+
+            cursor.execute(query, (playerID, new_App.yearid, new_App.teamID, new_App.lgID, new_App.GS, new_App.G_batting,new_App.G_p))
             cursor.close()
