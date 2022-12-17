@@ -2,18 +2,32 @@
 {% block title %}Players{% endblock %}
 {% block content %}
 
+
     <h3 class="display-5 text-center mb-3 text-dark" > Players </h3>
-    <table class="table is-striped is-fullwidth table-hover">
-      <tr>
-      <th>#</th>
-      <th>Player ID</th>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Birth Year</th>
-      <th>Birth Country</th>
-      <th>Weight</th>
-      <th>Height</th>
-      </tr>
+    
+    {% if error == 'True' %} <!-- Display alert if an exception happened -->
+      <div class="d-grid gap-2 col-5 mx-auto">
+        <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
+          You should enter a valid data.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endif %}
+    
+    <table class="table is-striped is-fullwidth table-hover table-bordered">
+        <thead class="table-light">
+            <tr>
+            <th>#</th>
+            <th>Player ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Birth Year</th>
+            <th>Birth Country</th>
+            <th>Weight (lbs)</th>
+            <th>Height (inch)</th>
+            <th>Operations</th>
+            </tr>
+        </thead>
       {% for i in range(players|length)%}
       <tr>
         <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
@@ -24,18 +38,126 @@
         <td>{{ players[i].birthCountry }}</td>
         <td>{{ players[i].weight }}</td>
         <td>{{ players[i].height }}</td>
+        <td>
+          <div class="dropdown show">
+            <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Operations
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">  <!-- Dropdown menu for operations -->
+              <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#playerModal"
+                 data-bs-playerID="{{players[i].playerID}}" data-bs-nameFirst="{{players[i].nameFirst}}"
+                 data-bs-nameLast="{{players[i].nameLast}}" data-bs-birthYear="{{players[i].birthYear}}"
+                 data-bs-birthCountry="{{players[i].birthCountry}}" data-bs-weight="{{players[i].weight}}"
+                 data-bs-height="{{players[i].height}}" data-bs-title="Update Player"
+                 data-bs-url="{{url_for('update_player', page_num=cur_page, playerID = players[i].playerID)}}">Update</a>  <!-- Update button -->
+              <a class="dropdown-item" href="{{url_for('del_player', page_num=cur_page, playerID = players[i].playerID)}}">Delete</a>  <!-- Delete button -->
+              <a class="dropdown-item" href="{{ url_for('player_stats_page', playerID = players[i].playerID) }}">See Stats</a>   <!-- See Stats button -->
+            </div>
+          </div>
+        </td>
       </tr>
       {% endfor %}
     </table>
-
-    <div class="col-xl">
-        <ul class="pagination justify-content-center mt-5">
-          <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=1) }}"> << </a> </li>
-          <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=(1, cur_page - 1)|max) }}"> < </a> </li>
-          <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
-          <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=(num_pages, cur_page + 1)|min) }}"> > </a></li>
-          <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=1911) }}"> >> </a></li>
-        </ul>
+    <div class="modal fade" id="playerModal" tabindex="-1" aria-labelledby="playerModalLabel" aria-hidden="true"> <!-- Modal for update and add -->
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="playerModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="post" id="formPlayer">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="playerID" class="col-form-label">Player ID:</label>
+                <input type="text" class="form-control" id="playerID" name="playerID">
+              </div>
+              <div class="mb-3">
+                <label for="nameFirst" class="col-form-label">First Name:</label>
+                <input type="text" class="form-control" id="nameFirst" name="nameFirst">
+              </div>
+              <div class="mb-3">
+                <label for="nameLast" class="col-form-label">Last Name:</label>
+                <input type="text" class="form-control" id="nameLast" name="nameLast">
+              </div>
+              <div class="mb-3">
+                <label for="birthYear" class="col-form-label">Birth Year:</label>
+                <input type="text" class="form-control" id="birthYear" name="birthYear">
+              </div>
+              <div class="mb-3">
+                <label for="birthCountry" class="col-form-label">Birth Country:</label>
+                <input type="text" class="form-control" id="birthCountry" name="birthCountry">
+              </div>
+              <div class="mb-3">
+                <label for="weight" class="col-form-label">Weight:</label>
+                <input type="text" class="form-control" id="weight" name="weight">
+              </div>
+              <div class="mb-3">
+                <label for="height" class="col-form-label">Height:</label>
+                <input type="text" class="form-control" id="height" name="height">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
       </div>
+    </div>
+    <div class="col-xl">  <!-- Navigation buttons for paging -->
+      <ul class="pagination justify-content-center mt-5">
+        <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=1, error='False') }}"> << </a> </li>
+        <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=(1, cur_page - 1)|max, error='False')}}"> < </a> </li>
+        <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
+        <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=(num_pages, cur_page + 1)|min, error='False') }}"> > </a></li>
+        <li class="page-item"><a class="page-link" href="{{ url_for('players_page', page_num=num_pages, error='False') }}"> >> </a></li>
+      </ul>
+    </div>
+    <div class="d-grid gap-2 col-5 mx-auto ">  <!-- Add player button -->
+      <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#playerModal" data-bs-title="Add Player"
+         data-bs-url="{{url_for('add_player', page_num=cur_page, playerID = playerID)}}"> Add Player </a>
+    </div>
+
+    <script type="text/javascript">
+      var playerModal = document.getElementById('playerModal') // Display players data in the modal at the update operation
+      playerModal.addEventListener('show.bs.modal', function (event) {
+
+        var button = event.relatedTarget
+
+        var playerID = button.getAttribute('data-bs-playerID')
+        var nameFirst = button.getAttribute('data-bs-nameFirst')
+        var nameLast = button.getAttribute('data-bs-nameLast')
+        var birthYear = button.getAttribute('data-bs-birthYear')
+        var birthCountry = button.getAttribute('data-bs-birthCountry')
+        var weight = button.getAttribute('data-bs-weight')
+        var height = button.getAttribute('data-bs-height')
+        var title = button.getAttribute('data-bs-title')
+        var url = button.getAttribute('data-bs-url')
+
+        var modalPlayerID = playerModal.querySelector('#playerID')
+        var modalNameFirst = playerModal.querySelector('#nameFirst')
+        var modalNameLast = playerModal.querySelector('#nameLast')
+        var modalBirthYear = playerModal.querySelector('#birthYear')
+        var modalBirthCountry = playerModal.querySelector('#birthCountry')
+        var modalWeight = playerModal.querySelector('#weight')
+        var modalHeight = playerModal.querySelector('#height')
+        var modalTitle = playerModal.querySelector('#playerModalLabel')
+        var modalForm = playerModal.querySelector('#formPlayer')
+
+        modalPlayerID.value = playerID
+        modalNameFirst.value = nameFirst
+        modalNameLast.value = nameLast
+        modalBirthYear.value = birthYear
+        modalBirthCountry.value = birthCountry
+        modalWeight.value = weight
+        modalHeight.value = height
+        modalTitle.textContent = title
+        modalForm.action = url
+      })
+
+      if ( window.history.replaceState ) {  // Prevent confirm submission alerts from the browser
+        window.history.replaceState( null, null, window.location.href );
+      }
+    </script>
 
 {% endblock %}
