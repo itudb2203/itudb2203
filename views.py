@@ -107,6 +107,8 @@ def del_appearances(playerID, yearid):
     return appearances_page(playerID,error)
 
 
+
+
 def update_appearances(playerID, yearid, teamID):
     error = 'False'
     if request.method == "POST":
