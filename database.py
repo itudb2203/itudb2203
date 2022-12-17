@@ -43,12 +43,12 @@ class Database:
         batting_list = []
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """SELECT playerID, yearid, teamID, lgID, R, G  FROM batting
+            query = """SELECT yearID, teamID, lgID, R, G  FROM batting
             WHERE playerID = ?
-            ORDER BY yearid"""
+            ORDER BY yearID"""
             cursor.execute(query, (playerID,))
-            for playerID, yearid, teamID, lgID, R, G in cursor:
-                batting_list.append(Batting(playerID, yearid, teamID, lgID, R, G))
+            for yearid, teamID, lgID, R, G in cursor:
+                batting_list.append(Batting(yearid, teamID, lgID, R, G))
             cursor.close()
             return batting_list
 
@@ -62,16 +62,17 @@ class Database:
     def update_batting(self, playerID, yearid, teamID, updated_batting):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
+            print(updated_batting.yearid, updated_batting.teamID, updated_batting.lgID, updated_batting.R, updated_batting.G)
             query = """UPDATE batting
             SET yearID = ?,
                 teamID = ?,
                 lgID = ?,
                 R = ?,
-                G = ?,
+                G = ?
             WHERE
                 (playerID = ? AND yearID = ? AND teamID = ?)"""
 
-            cursor.execute(query, (updated_batting.yearid, updated_batting.teamID, updated_batting.lgID, updated_batting.R,updated_batting.G, playerID, yearid, teamID))
+            cursor.execute(query, (updated_batting.yearid, updated_batting.teamID, updated_batting.lgID, updated_batting.R, updated_batting.G, playerID, yearid, teamID))
             cursor.close()
 
 

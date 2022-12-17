@@ -37,8 +37,14 @@ def update_batting(playerID, yearid, teamID):
         lgID = request.form.get("lgID")
         R_updated = request.form.get("R")
         G_updated = request.form.get("G")
+
+        print(yearid_updated)
+        print(teamID_updated)
+        print(lgID)
+        print(R_updated)
+        print(G_updated)
         try:
-            updated_batting = Batting(playerID,yearid_updated,teamID_updated,lgID,R_updated,G_updated)
+            updated_batting = Batting(yearid_updated,teamID_updated,lgID,R_updated,G_updated)
 
             myDB.update_batting(playerID, yearid, teamID, updated_batting)
         except:
@@ -59,7 +65,7 @@ def add_batting(playerID):
         G_new = request.form.get("G")
         try:
 
-            new_BaT = Batting(playerID, yearid_new, teamID_new, lgID_new, R_new, G_new)
+            new_BaT = Batting(yearid_new, teamID_new, lgID_new, R_new, G_new)
             myDB.add_batting(playerID, new_BaT)
         except:
             error = 'True'

@@ -1,6 +1,5 @@
 class Batting:
-    def __init__(self, playerID, yearid, teamID, lgID, R, G ):
-        self.playerID = playerID
+    def __init__(self, yearid, teamID, lgID, R, G ):
         self.yearid = yearid
         self.teamID = teamID
         self.lgID = lgID

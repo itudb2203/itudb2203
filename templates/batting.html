@@ -18,7 +18,6 @@
       <table class="table is-striped is-fullwidth table-hover">
         <tr>
         <th>#</th>
-        <th>playerID</th>
         <th>yearID</th>
         <th>teamID</th>
         <th>lgID</th>
@@ -29,7 +28,6 @@
         {% for i in range(batting|length)%}
         <tr class="align-middle">
           <td>{{ i + 1 }}</td>
-          <td>{{ batting[i].playerID }}</td>
           <td>{{ batting[i].yearid }}</td>
           <td>{{ batting[i].teamID }}</td>
           <td>{{ batting[i].lgID }}</td>
@@ -42,10 +40,10 @@
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#BaTModal"
-                   data-bs-playerID="{{batting[i].playerID}}" data-bs-yearid="{{batting[i].yearid}}"
+                   data-bs-yearid="{{batting[i].yearid}}"
                    data-bs-teamID="{{batting[i].teamID}}" data-bs-lgID="{{batting[i].lgID}}"
                    data-bs-R="{{batting[i].R}}" data-bs-G="{{batting[i].G}}" data-bs-title="Update Batting Data"
-                   data-bs-url="{{url_for('update_batting', playerID = playerID , yearid = batting[i].yearid )}}">Update</a>
+                   data-bs-url="{{url_for('update_batting', playerID = playerID , yearid = batting[i].yearid, teamID = batting[i].teamID)}}">Update</a>
                 <a class="dropdown-item" href="{{url_for('del_batting', playerID = playerID, yearid = batting[i].yearid)}}">Delete</a>
               </div>
             </div>
@@ -84,7 +82,7 @@
               </div>
               <div class="mb-3">
                 <label for="G" class="col-form-label">G:</label>
-                <input type="text" class="form-control" id="g" name="g">
+                <input type="text" class="form-control" id="G" name="G">
               </div>
             </div>
             <div class="modal-footer">
@@ -106,7 +104,6 @@
 
         var button = event.relatedTarget
 
-        var playerID = button.getAttribute('data-bs-playerID')
         var yearid = button.getAttribute('data-bs-yearid')
         var teamID = button.getAttribute('data-bs-teamID')
         var lgID = button.getAttribute('data-bs-lgID')
@@ -115,7 +112,6 @@
         var title = button.getAttribute('data-bs-title')
         var url = button.getAttribute('data-bs-url')
 
-        var modalplayerID = BaTModal.querySelector('#playerID')
         var modalyearid = BaTModal.querySelector('#yearid')
         var modalteamID = BaTModal.querySelector('#teamID')
         var modallgID = BaTModal.querySelector('#lgID')
@@ -124,7 +120,6 @@
         var modalTitle = BaTModal.querySelector('#BaTModalLabel')
         var modalForm = BaTModal.querySelector('#formBaT')
 
-        modalplayerID.value = playerID
         modalyearid.value = yearid
         modalteamID.value = teamID
         modallgID.value = lgID
