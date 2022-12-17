@@ -43,12 +43,12 @@ class Database:
         batting_list = []
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """SELECT yearID, teamID, lgID, R, G  FROM batting
+            query = """SELECT yearID, teamID, lgID, R, G ,H,RBI,BB FROM batting
             WHERE playerID = ?
             ORDER BY yearID"""
             cursor.execute(query, (playerID,))
-            for yearid, teamID, lgID, R, G in cursor:
-                batting_list.append(Batting(yearid, teamID, lgID, R, G))
+            for yearid, teamID, lgID, R, G ,H,RBI , BB in cursor:
+                batting_list.append(Batting(yearid, teamID, lgID, R, G , H , RBI , BB))
             cursor.close()
             return batting_list
 
@@ -68,11 +68,14 @@ class Database:
                 teamID = ?,
                 lgID = ?,
                 R = ?,
-                G = ?
+                G = ?,
+                H = ?,
+                RBI = ?,
+                BB = ?
             WHERE
                 (playerID = ? AND yearID = ? AND teamID = ?)"""
 
-            cursor.execute(query, (updated_batting.yearid, updated_batting.teamID, updated_batting.lgID, updated_batting.R, updated_batting.G, playerID, yearid, teamID))
+            cursor.execute(query, (updated_batting.yearid, updated_batting.teamID, updated_batting.lgID, updated_batting.R, updated_batting.G,0,0,0, playerID, yearid, teamID))
             cursor.close()
 
 
@@ -80,8 +83,8 @@ class Database:
     def add_batting(self, playerID, new_BaT):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO batting (playerID, yearID, teamID, lgID, R, G)
-            VALUES (?, ?, ?, ?, ?, ?);"""
+            query = """INSERT INTO batting (playerID, yearID, teamID, lgID, R, G , H ,RBI , BB)
+            VALUES (?, ?, ?, ?, ?, ? , ? , ? , ?);"""
 
-            cursor.execute(query, (playerID, new_BaT.yearid, new_BaT.teamID, new_BaT.lgID, new_BaT.R, new_BaT.G))
+            cursor.execute(query, (playerID, new_BaT.yearid, new_BaT.teamID, new_BaT.lgID, new_BaT.R, new_BaT.G,0,0,0))
             cursor.close()

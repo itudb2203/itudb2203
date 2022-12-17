@@ -23,6 +23,9 @@
         <th>lgID</th>
         <th>R</th>
         <th>G</th>
+          <th>H</th>
+        <th>RBI</th>
+        <th>BB</th>
 
         </tr>
         {% for i in range(batting|length)%}
@@ -33,6 +36,9 @@
           <td>{{ batting[i].lgID }}</td>
           <td>{{ batting[i].R }}</td>
           <td>{{ batting[i].G }}</td>
+          <td>{{ batting[i].H }}</td>
+          <td>{{ batting[i].RBI }}</td>
+          <td>{{ batting[i].BB }}</td>
           <td>
              <div class="dropdown show">
               <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
