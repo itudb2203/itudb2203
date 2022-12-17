@@ -30,9 +30,9 @@ def create_app():
     # Teams page url's
     app.add_url_rule("/teams/<page_num>/", view_func=views.teams_page)
     app.add_url_rule("/teams/<page_num>/error:<error>", view_func=views.teams_page)
-    #app.add_url_rule("/teams/<page_num>/delete/<teamID>", view_func=views.del_team)
-    #app.add_url_rule("/teams/<page_num>/update/<teamID>", methods=["GET", "POST"], view_func=views.update_team)
-    #app.add_url_rule("/teams/<page_num>/add", methods=["GET", "POST"], view_func=views.add_team)
+    app.add_url_rule("/teams/<page_num>/delete/<teamID>", view_func=views.del_team)
+    app.add_url_rule("/teams/<page_num>/update/<teamID>", methods=["GET", "POST"], view_func=views.update_team)
+    app.add_url_rule("/teams/<page_num>/add", methods=["GET", "POST"], view_func=views.add_team)
 
     home_dir = os.getcwd()
 

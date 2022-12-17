@@ -3,7 +3,7 @@ from math import ceil
 
 from hall_of_fame import HallOfFame
 from player import Player
-
+from team import Team
 def home_page():
     return render_template("home.html")
 
@@ -151,3 +151,62 @@ def teams_page(page_num,error):
     num_of_pages = ceil(myDB.get_num_teams() / 10)
     return render_template("teams.html", teams=teams_list, cur_page = int(page_num), num_pages = num_of_pages,
                            error=error)
+
+def del_team(page_num, teamID):
+    myDB = current_app.config["dbconfig"]
+    myDB.del_team(teamID)
+    return redirect(url_for('teams_page', page_num=page_num, error='False'))
+
+def update_team(page_num, teamID):
+    error = 'False'  # Error message is not displayed if there's no exception
+    if request.method == "POST":
+        myDB = current_app.config["dbconfig"]
+
+        teamID_updated = request.form.get("teamID")
+        yearID_updated = request.form.get("yearID")
+        name_updated = request.form.get("name")
+        Rank_updated = request.form.get("Rank")
+        LgWin_updated = request.form.get("LgWin")
+        G_updated = request.form.get("G")
+        W_updated = request.form.get("W")
+        L_updated = request.form.get("L")
+        R_updated = request.form.get("R")
+        E_updated = request.form.get("E")
+        park_updated = request.form.get("park")
+        try:
+            updated_team = Team(teamID_updated, yearID_updated, name_updated, Rank_updated,
+                                    LgWin_updated, G_updated, W_updated, L_updated, R_updated, E_updated, park_updated)
+
+            myDB.update_team(teamID, updated_team)
+
+        except:
+            error = 'True'
+
+    return redirect(url_for('teams_page', page_num=page_num, error=error))
+
+def add_team(page_num):
+    error = 'False'  # Error message is not displayed if there's no exception
+    if request.method == "POST":
+        myDB = current_app.config["dbconfig"]
+
+        teamID_new = request.form.get("teamID")
+        yearID_new = request.form.get("yearID")
+        name_new = request.form.get("name")
+        Rank_new = request.form.get("Rank")
+        LgWin_new = request.form.get("LgWin")
+        G_new = request.form.get("G")
+        W_new = request.form.get("W")
+        L_new = request.form.get("L")
+        R_new = request.form.get("R")
+        E_new = request.form.get("E")
+        park_new = request.form.get("park")
+        try:
+            new_team = Team(teamID_new, yearID_new, name_new, Rank_new, LgWin_new, G_new,
+                                W_new, L_new, R_new, E_new, park_new)
+
+            myDB.add_team(new_team)
+
+        except:
+            error = 'True'
+
+    return redirect(url_for('teams_page', page_num=page_num, error=error))

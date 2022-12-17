@@ -59,8 +59,8 @@
                  data-bs-R="{{teams[i].R}}" data-bs-E="{{teams[i].E}}"
                  data-bs-park="{{teams[i].park}}" data-bs-title="Update Team"
                  data-bs-url="{{url_for('update_team', page_num=cur_page, teamID = teams[i].teamID)}}">Update</a>  <!-- Update button -->
-              <a class="dropdown-item" href="{{url_for('del_team', page_num=cur_page, teamID = teams[i].teamID)}}">Delete</a>  <!-- Delete button -->
-              <!-- <a class="dropdown-item" href="{{ url_for('player_stats_page', playerID = players[i].playerID) }}">See Stats</a>    See Stats button -->
+              <a class="dropdown-item" href="{{url_for('del_team', page_num=cur_page, teamID = teams[i].teamID, yearID = teams[i].yearID) }}">Delete</a>  <!-- Delete button -->
+
             </div>
           </div>
         </td>
