@@ -2,7 +2,7 @@
 {% block title %}{% endblock %}
 {% block content %}
 
-    {% if error == 'True' %}
+    {% if error == 'True' %} <!-- Display alert if an exception happened -->
       <div class="d-grid gap-2 col-5 mx-auto">
         <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
           You should enter a valid data.
@@ -42,13 +42,13 @@
               <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Operations
               </a>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">  <!-- Dropdown menu for operations -->
                 <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#hofModal"
                    data-bs-yearid="{{hall_of_fame[i].yearid}}" data-bs-category="{{hall_of_fame[i].category}}"
                    data-bs-votedBy="{{hall_of_fame[i].votedBy}}" data-bs-ballots="{{hall_of_fame[i].ballots}}"
                    data-bs-needed="{{hall_of_fame[i].needed}}" data-bs-votes="{{hall_of_fame[i].votes}}" data-bs-title="Update Hall of Fame Data"
-                   data-bs-url="{{url_for('update_hall_of_fame', playerID = playerID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Update</a>
-                <a class="dropdown-item" href="{{url_for('del_hall_of_fame', playerID = playerID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Delete</a>
+                   data-bs-url="{{url_for('update_hall_of_fame', playerID = playerID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Update</a>  <!-- Update button -->
+                <a class="dropdown-item" href="{{url_for('del_hall_of_fame', playerID = playerID, yearid = hall_of_fame[i].yearid, votedBy = hall_of_fame[i].votedBy)}}">Delete</a>  <!-- Delete button -->
               </div>
             </div>
           </td>
@@ -57,9 +57,9 @@
       </table>
 
     {% else %}
-      <h3 class="display-6 text-center mb-3 text-dark"> The player has no hall of fame data.</h3>
+      <h3 class="display-6 text-center mb-3 text-dark"> The player has no hall of fame data.</h3>  <!-- If hof_list is empty -->
     {% endif %}
-    <div class="modal fade" id="hofModal" tabindex="-1" aria-labelledby="hofModalLabel" aria-hidden="true">
+    <div class="modal fade" id="hofModal" tabindex="-1" aria-labelledby="hofModalLabel" aria-hidden="true"> <!-- Modal for update and add -->
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -101,13 +101,13 @@
         </div>
       </div>
     </div>
-    <div class="d-grid gap-2 col-5 mx-auto ">
+    <div class="d-grid gap-2 col-5 mx-auto ">  <!-- Add hall of fame data button -->
       <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#hofModal" data-bs-title="Add Hall of Fame Data"
          data-bs-url="{{url_for('add_hall_of_fame', playerID = playerID)}}"> Add Hall of Fame Data </a>
     </div>
 
     <script type="text/javascript">
-      var hofModal = document.getElementById('hofModal')
+      var hofModal = document.getElementById('hofModal') // Display hall of fame data in the modal at the update operation
       hofModal.addEventListener('show.bs.modal', function (event) {
 
         var button = event.relatedTarget
@@ -140,7 +140,7 @@
         modalForm.action = url
       })
 
-      if ( window.history.replaceState ) {
+      if ( window.history.replaceState ) {  // Prevent confirm submission alerts from the browser
         window.history.replaceState( null, null, window.location.href );
       }
     </script>
