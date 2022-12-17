@@ -74,20 +74,20 @@ def add_player(page_num):
     return redirect(url_for('players_page', page_num=page_num, error=error))
 
 
-def hall_of_fame_page(player_ID, error):
+def hall_of_fame_page(playerID, error):
     myDB = current_app.config["dbconfig"]
-    player_name = myDB.get_player_name(player_ID)
-    hof = myDB.get_hall_of_fame(player_ID)
-    return render_template("hall_of_fame.html", player_name=player_name, player_ID=player_ID, hall_of_fame=hof, error=error)
+    player_name = myDB.get_player_name(playerID)
+    hof = myDB.get_hall_of_fame(playerID)
+    return render_template("hall_of_fame.html", player_name=player_name, playerID=playerID, hall_of_fame=hof, error=error)
 
 
-def del_hall_of_fame(player_ID, yearid, votedBy):
+def del_hall_of_fame(playerID, yearid, votedBy):
     myDB = current_app.config["dbconfig"]
-    myDB.del_hall_of_fame(player_ID, yearid, votedBy)
-    return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error='False'))
+    myDB.del_hall_of_fame(playerID, yearid, votedBy)
+    return redirect(url_for('hall_of_fame_page', playerID=playerID, error='False'))
 
 
-def update_hall_of_fame(player_ID, yearid, votedBy):
+def update_hall_of_fame(playerID, yearid, votedBy):
     error = 'False'
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
@@ -106,13 +106,13 @@ def update_hall_of_fame(player_ID, yearid, votedBy):
 
             updated_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
 
-            myDB.update_hall_of_fame(player_ID, yearid, votedBy, updated_hof)
+            myDB.update_hall_of_fame(playerID, yearid, votedBy, updated_hof)
         except:
             error = 'True'
-        return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=error))
+        return redirect(url_for('hall_of_fame_page', playerID=playerID, error=error))
 
 
-def add_hall_of_fame(player_ID):
+def add_hall_of_fame(playerID):
     error = 'False'
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
@@ -132,9 +132,9 @@ def add_hall_of_fame(player_ID):
 
             new_hof = HallOfFame(yearid_new, votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
 
-            myDB.add_hall_of_fame(player_ID, new_hof)
+            myDB.add_hall_of_fame(playerID, new_hof)
 
         except:
             error = 'True'
             
-    return redirect(url_for('hall_of_fame_page', player_ID=player_ID, error=error))
+    return redirect(url_for('hall_of_fame_page', playerID=playerID, error=error))
