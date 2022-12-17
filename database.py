@@ -43,8 +43,7 @@ class Database:
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
             query = """UPDATE Master
-            SET playerID = ?,
-                nameFirst = ?,
+            SET nameFirst = ?,
                 nameLast = ?,
                 birthYear = ?,
                 birthCountry = ?,
@@ -53,9 +52,19 @@ class Database:
             WHERE
                 playerID = ?"""
 
-            cursor.execute(query, (updated_player.playerID, updated_player.nameFirst, updated_player.nameLast, updated_player.birthYear,
+            cursor.execute(query, (updated_player.nameFirst, updated_player.nameLast, updated_player.birthYear,
                                    updated_player.birthCountry, updated_player.weight, updated_player.height, playerID))
             cursor.close()
+
+    # Returns 1 if there's a player with that id, 0 if not.
+    def check_player(self, playerID):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT COUNT (*) FROM Master WHERE playerID = ?"""
+            cursor.execute(query, (playerID,))
+            player_exists = cursor.fetchone()[0]
+            cursor.close()
+            return int(player_exists)
 
 
     def add_player(self, new_player):
