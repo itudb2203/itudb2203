@@ -94,12 +94,12 @@ class Database:
         appearances_list = []
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """SELECT yearID, teamID, lgID, playerID , GS , G_batting , G_p FROM Appearances
+            query = """SELECT yearID, teamID, lgID , GS , G_batting , G_p FROM Appearances
             WHERE playerID = ?
             ORDER BY yearID"""
             cursor.execute(query, (playerID,))
-            for yearid, teamID, lgID, playerID , GS , G_batting , G_p in cursor:
-                appearances_list.append(Appearances(yearid, teamID, lgID, playerID , GS , G_batting , G_p))
+            for yearid, teamID, lgID , GS , G_batting , G_p in cursor:
+                appearances_list.append(Appearances(yearid, teamID, lgID, GS , G_batting , G_p))
             cursor.close()
             return appearances_list
 
@@ -120,7 +120,7 @@ class Database:
                 lgID = ?,
                 GS = ?,
                 G_batting = ?,
-                G_p = ?,
+                G_p = ?
                 
             WHERE
                 (playerID = ? AND yearID = ? AND teamID = ?)"""
@@ -132,7 +132,7 @@ class Database:
     def add_appearances(self, playerID, new_App):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """INSERT INTO batting (playerID, yearID, teamID, lgID, GS, G_batting , G_p)
+            query = """INSERT INTO appearances   (playerID, yearID, teamID, lgID, GS, G_batting , G_p)
             VALUES (?, ?, ?, ?, ?, ? , ? );"""
 
             cursor.execute(query, (playerID, new_App.yearid, new_App.teamID, new_App.lgID, new_App.GS, new_App.G_batting,new_App.G_p))

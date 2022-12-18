@@ -135,9 +135,9 @@ def update_appearances(playerID, yearid, teamID):
             error = "True"
 
         if error == "False":
-            updated_batting = Appearances(yearid_updated,teamID_updated,lgID_updated,playerID ,GS_updated,G_batting_updated,G_p_updated)
+            updated_appearances = Appearances(yearid_updated,teamID_updated,lgID_updated,playerID ,GS_updated,G_batting_updated,G_p_updated)
 
-            myDB.update_appearances(playerID, yearid, teamID, updated_batting)
+            myDB.update_appearances(playerID, yearid, teamID, updated_appearances)
         else:
             error = 'True'
 

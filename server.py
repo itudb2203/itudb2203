@@ -13,6 +13,8 @@ def create_app():
     app.add_url_rule("/players/<page_num>", view_func=views.players_page)
     app.add_url_rule("/player/<playerID>", view_func=views.player_stats_page)
     app.add_url_rule("/player/<playerID>/batting/error:<error>", view_func=views.batting_page)
+    app.add_url_rule("/player/<playerID>/batting", view_func=views.batting_page)
+    app.add_url_rule("/player/<playerID>/appearances", view_func=views.appearances_page)
     app.add_url_rule("/player/<playerID>/appearances/error:<error>", view_func=views.appearances_page)
     app.add_url_rule("/player/<playerID>/appearances/delete/<yearid>", view_func=views.del_appearances)
     app.add_url_rule("/player/<playerID>/appearances/update/<yearid>/<teamID>", methods=['GET', 'POST'],view_func=views.update_appearances)
