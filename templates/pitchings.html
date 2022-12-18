@@ -12,6 +12,7 @@
   <th>lg ID</th>
   <th>Win</th>
   <th>Lose</th>
+  <th>Operations</th>
   </tr>
   {% for i in range(pitchings|length)%}
   <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
@@ -22,9 +23,69 @@
     <td>{{ pitchings[i].lgID }}</td>
     <td>{{ pitchings[i].w }}</td>
     <td>{{ pitchings[i].l }}</td>
+    <td>
+      <div class="dropdown show">
+        <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Operations
+        </a>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#pitchingModal"
+          data-bs-playerID="{{pitchings[i].playerID}}" data-bs-yearID="{{pitchings[i].yearID}}" data-bs-teamID="{{pitchings[i].teamID}}"
+          data-bs-lgID="{{pitchings[i].lgID}}" data-bs-w="{{pitchings[i].w}}"
+          data-bs-l="{{pitchings[i].l}}" data-bs-title="Update Pitching"
+          data-bs-url="{{url_for('update_pitching', page_num=cur_page)}}">Update</a>
+          <a class="dropdown-item" href="{{url_for('delete_pitching', page_num=cur_page, playerID = pitchings[i].playerID, yearID = pitchings[i].yearID, stint = pitchings[i].stint)}}">Delete</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+    </td>
   </tr>
   {% endfor %}
 </table>
+
+<div class="modal fade" id="pitchingModal" tabindex="-1" aria-labelledby="pitchingModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pitchingModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post" id="formPitching">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="playerID" class="col-form-label">Player ID:</label>
+            <input type="text" class="form-control" id="playerID" name="playerID" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="yearID" class="col-form-label">Year:</label>
+            <input type="text" class="form-control" id="yearID" name="yearID">
+          </div>
+          <div class="mb-3">
+            <label for="teamID" class="col-form-label">Team ID:</label>
+            <input type="text" class="form-control" id="teamID" name="teamID">
+          </div>
+          <div class="mb-3">
+            <label for="lgID" class="col-form-label">lg ID:</label>
+            <input type="text" class="form-control" id="lgID" name="lgID">
+          </div>
+          <div class="mb-3">
+            <label for="w" class="col-form-label">Win:</label>
+            <input type="text" class="form-control" id="w" name="w">
+          </div>
+          <div class="mb-3">
+            <label for="l" class="col-form-label">Lose:</label>
+            <input type="text" class="form-control" id="l" name="l">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <div class="col-xl">
   <ul class="pagination justify-content-center mt-5">
@@ -36,4 +97,50 @@
   </ul>
 </div>
 
+<div class="d-grid gap-2 col-5 mx-auto ">
+  <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#pitchingModal" data-bs-playerID="{{pitchings[0].playerID}}" data-bs-title="Add Pitching"  
+  data-bs-url="{{url_for('add_pitching', page_num=cur_page)}}"> Add Pitching </a>
+</div>
+
+<script type="text/javascript">
+  var pitchingModal = document.getElementById('pitchingModal')
+  pitchingModal.addEventListener('show.bs.modal', function (event) {
+
+    var button = event.relatedTarget
+
+    var playerID = button.getAttribute('data-bs-playerID')
+    var yearID = button.getAttribute('data-bs-yearID')
+    var stint = button.getAttribute('data-bs-stint')
+    var teamID = button.getAttribute('data-bs-teamID')
+    var lgID = button.getAttribute('data-bs-lgID')
+    var w = button.getAttribute('data-bs-w')
+    var l = button.getAttribute('data-bs-l')
+    var title = button.getAttribute('data-bs-title')
+    var url = button.getAttribute('data-bs-url')
+
+    var modalPlayerID = pitchingModal.querySelector('#playerID')
+    var modalyearID = pitchingModal.querySelector('#yearID')
+    var modalstint = pitchingModal.querySelector('#stint')
+    var modalteamID = pitchingModal.querySelector('#teamID')
+    var modallgID = pitchingModal.querySelector('#lgID')
+    var modalw = pitchingModal.querySelector('#w')
+    var modall = pitchingModal.querySelector('#l')
+    var modalTitle = pitchingModal.querySelector('#pitchingModalLabel')
+    var modalForm = pitchingModal.querySelector('#formPitching')
+
+    modalPlayerID.value = playerID
+    modalyearID.value = yearID
+    modalstint.value = stint
+    modalteamID.value = teamID
+    modallgID.value = lgID
+    modalw.value = w
+    modall.value = l
+    modalTitle.textContent = title
+    modalForm.action = url
+  })
+
+  if ( window.history.replaceState ) {
+    window.history.replaceState( null, null, window.location.href );
+  }
+</script>
 {% endblock %}

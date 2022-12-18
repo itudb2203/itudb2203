@@ -80,12 +80,35 @@ class Database:
             cursor.close()
             return num_of_pitchings
 
-    def delete_pitchings_by_playerID(self, playerID):
+    def delete_pitching(self, playerID, yearID, stint):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
             query = """DELETE FROM Pitching
-            WHERE playerID = ?"""
-            cursor.execute(query, (playerID,))
+            WHERE playerID = ? AND yearID = ? AND stint = ?"""
+            cursor.execute(query, (playerID, yearID, stint,))
+            query = """UPDATE Pitching SET stint = stint - 1
+            WHERE playerID=? AND yearID=? AND stint>?"""
+            cursor.execute(query, (playerID, yearID, stint,))
+            cursor.close()
+            # self.update_stints_on_delete(playerID, yearID, stint)
+
+    def get_stint(self, playerID, yearID):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT stint FROM Pitching
+            WHERE playerID=? and yearID=?
+            ORDER BY DESC stint"""
+            cursor.execute(query, (playerID, yearID,))
+            stint = cursor.fetchone()[0]
+            cursor.close()
+            return stint
+
+    def update_stints_on_delete(self, playerID, yearID, stint):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE Pitching SET stint = stint - 1
+            WHERE playerID=? AND yearID=? AND stint>?"""
+            cursor.execute(query, (playerID, yearID, stint,))
             cursor.close()
 
     def add_pitching(self, pitching):
@@ -94,7 +117,8 @@ class Database:
             query = """INSERT INTO Pitching 
             (playerID, yearid, stint, teamID, lgID, W, L)
             VALUES (?, ?,?,?,?,?,? )"""
-            cursor.execute(query, (pitching.playerID, pitching.yearID, pitching.stint,
+            stint = self.get_stint(pitching.playerID, pitching.yearID)
+            cursor.execute(query, (pitching.playerID, pitching.yearID, stint,
                            pitching.teamID, pitching.lgID, pitching.w, pitching.l,))
             cursor.close()
 
