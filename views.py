@@ -4,6 +4,7 @@ from math import ceil
 from hall_of_fame import HallOfFame
 from player import Player
 from team import Team
+from manager import Manager
 def home_page():
     return render_template("home.html")
 
@@ -175,8 +176,9 @@ def update_team(page_num, yearID, lgID, teamID):
         E_updated = request.form.get("E")
         park_updated = request.form.get("park")
         try:
-            updated_team = Team(yearID_updated, lgID_updated, teamID_updated, name_updated, Rank_updated,
-                                    LgWin_updated, G_updated, W_updated, L_updated, R_updated, E_updated, park_updated)
+
+            updated_team = Team(int(yearID_updated), str(lgID_updated), str(teamID_updated), name_updated, int(Rank_updated),
+                                    str(LgWin_updated), int(G_updated), int(W_updated), int(L_updated), int(R_updated), int(E_updated), park_updated)
 
             myDB.update_team(yearID, lgID, teamID, updated_team)
 
@@ -203,8 +205,8 @@ def add_team(page_num):
         E_new = request.form.get("E")
         park_new = request.form.get("park")
         try:
-            new_team = Team(yearID_new, lgID_new, teamID_new, name_new, Rank_new, LgWin_new, G_new,
-                                W_new, L_new, R_new, E_new, park_new)
+            new_team = Team(int(yearID_new), str(lgID_new), str(teamID_new), name_new, int(Rank_new), str(LgWin_new), int(G_new),
+                                int(W_new), int(L_new), int(R_new), int(E_new), park_new)
 
             myDB.add_team(new_team)
 
@@ -212,3 +214,68 @@ def add_team(page_num):
             error = 'True'
 
     return redirect(url_for('teams_page', page_num=page_num, error=error))
+
+def managers_page(page_num, error):
+    myDB = current_app.config["dbconfig"]
+    managers_list = myDB.get_managers(page_num)
+    num_of_pages = ceil(myDB.get_num_managers() / 10)
+    return render_template("managers.html", managers=managers_list, cur_page = int(page_num), num_pages = num_of_pages,
+                           error=error)
+
+def del_manager(page_num, yearID, teamID, inseason):
+    myDB = current_app.config["dbconfig"]
+    myDB.del_manager(yearID, teamID, inseason)
+    return redirect(url_for('managers_page', page_num=page_num, error='False'))
+
+def update_manager(page_num, yearID, teamID, inseason):
+    error = 'False'
+    if request.method == "POST":
+        myDB = current_app.config["dbconfig"]
+
+        playerID_updated = request.form.get("playerID")
+        yearID_updated = request.form.get("yearID")
+        teamID_updated = request.form.get("teamID")
+        lgID_updated = request.form.get("lgID")
+        inseason_updated = request.form.get("inseason")
+        G_updated = request.form.get("G")
+        W_updated = request.form.get("W")
+        L_updated = request.form.get("L")
+        rank_updated = request.form.get("rank")
+        plyrMgr_updated = request.form.get("plyrMgr")
+        try:
+
+            updated_manager = Manager(str(playerID_updated), int(yearID_updated), str(teamID_updated), str(lgID_updated), int(inseason_updated),
+                                      int(G_updated), int(W_updated), int(L_updated), int(rank_updated), str(plyrMgr_updated))
+
+            myDB.update_manager(yearID, teamID, inseason, updated_manager)
+
+        except:
+            error = 'True'
+
+    return redirect(url_for('managers_page', page_num=page_num, error=error))
+
+def add_manager(page_num):
+    error = 'False'  # Error message is not displayed if there's no exception
+    if request.method == "POST":
+        myDB = current_app.config["dbconfig"]
+
+        playerID_new = request.form.get("playerID")
+        yearID_new = request.form.get("yearID")
+        teamID_new = request.form.get("teamID")
+        lgID_new = request.form.get("lgID")
+        inseason_new = request.form.get("inseason")
+        G_new = request.form.get("G")
+        W_new = request.form.get("W")
+        L_new = request.form.get("L")
+        rank_new = request.form.get("rank")
+        plyrMgr_new = request.form.get("plyrMgr")
+        try:
+            new_manager = Manager(str(playerID_new), int(yearID_new), str(teamID_new), str(lgID_new), int(inseason_new),
+                                      int(G_new), int(W_new), int(L_new), int(rank_new), str(plyrMgr_new))
+
+            myDB.add_manager(new_manager)
+
+        except:
+            error = 'True'
+
+    return redirect(url_for('managers_page', page_num=page_num, error=error))

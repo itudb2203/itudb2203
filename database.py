@@ -2,6 +2,7 @@ import sqlite3 as dbapi2
 from player import Player
 from team import Team
 from hall_of_fame import HallOfFame
+from manager import Manager
 
 class Database:
     def __init__(self, dbfile):
@@ -192,4 +193,64 @@ class Database:
 
             cursor.execute(query, (new_team.yearID, new_team.lgID, new_team.teamID, new_team.name, new_team.Rank,
                                    new_team.LgWin, new_team.G, new_team.W, new_team.L, new_team.R, new_team.E, new_team.park))
+            cursor.close()
+
+    def get_managers(self, page_num):
+        managers_list = []
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT playerID, yearID, teamID, lgID, inseason, G, W, L, rank, plyrMgr FROM Managers
+            ORDER BY yearID,teamID,inseason
+            LIMIT 10 OFFSET ?"""
+            cursor.execute(query, ((int(page_num) - 1) * 10,))
+            for playerID, yearID, teamID, lgID, inseason, G, W, L, rank, plyrMgr in cursor:
+                managers_list.append(Manager(playerID, yearID, teamID, lgID, inseason, G, W, L, rank, plyrMgr))
+            cursor.close()
+        return managers_list
+
+    def get_num_managers(self):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = "SELECT COUNT (*) FROM Managers AS num_managers"
+            cursor.execute(query)
+            num_of_managers = cursor.fetchone()[0]
+            cursor.close()
+            return num_of_managers
+
+    def del_manager(self, yearID, teamID, inseason):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = "DELETE FROM Managers WHERE (yearID = ? AND teamID = ? AND inseason = ?)"
+            cursor.execute(query, (yearID, teamID, inseason))
+            cursor.close()
+
+    def update_manager(self, yearID, teamID, inseason, updated_manager):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE Managers
+            SET playerID = ?,
+                yearID = ?,
+                teamID = ?,
+                lgID = ?,
+                inseason = ?,
+                G = ?,
+                W = ?,
+                L = ?,
+                rank = ?,
+                plyrMgr = ?
+            WHERE
+                (yearID = ? AND teamID = ? AND inseason = ?)"""
+
+            cursor.execute(query, (updated_manager.playerID, updated_manager.yearID, updated_manager.teamID, updated_manager.lgID, updated_manager.inseason,
+                                   updated_manager.G, updated_manager.W, updated_manager.L, updated_manager.rank, updated_manager.plyrMgr, yearID, teamID, inseason))
+            cursor.close()
+
+    def add_manager(self, new_manager):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO Managers (playerID, yearID, teamID, lgID, inseason, G, W, L, rank, plyrMgr)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"""
+
+            cursor.execute(query, (new_manager.playerID, new_manager.yearID, new_manager.teamID, new_manager.lgID, new_manager.inseason,
+                                   new_manager.G, new_manager.W, new_manager.L, new_manager.rank, new_manager.plyrMgr))
             cursor.close()
