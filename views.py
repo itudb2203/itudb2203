@@ -159,7 +159,7 @@ def del_team(page_num, yearID, lgID, teamID):
     return redirect(url_for('teams_page', page_num=page_num, error='False'))
 
 def update_team(page_num, yearID, lgID, teamID):
-    error = 'False'  # Error message is not displayed if there's no exception
+    error = 'False'
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
@@ -188,7 +188,7 @@ def update_team(page_num, yearID, lgID, teamID):
     return redirect(url_for('teams_page', page_num=page_num, error=error))
 
 def add_team(page_num):
-    error = 'False'  # Error message is not displayed if there's no exception
+    error = 'False'
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
@@ -255,7 +255,7 @@ def update_manager(page_num, yearID, teamID, inseason):
     return redirect(url_for('managers_page', page_num=page_num, error=error))
 
 def add_manager(page_num):
-    error = 'False'  # Error message is not displayed if there's no exception
+    error = 'False'
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 

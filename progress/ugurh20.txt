@@ -1,3 +1,11 @@
 24 November 2022
-- Created altay/feature/teams branch to implement displaying and listing of Teams table
+- Created altay/feature/teams branch to implement displaying and listing of Teams table.
 - Implemented the functionality to display and list the Teams table when the Teams button from the home page is clicked.
+17 December 2022
+- Improved visualization of Teams table and started changing the code for validation purposes.
+- Laid out the basic functions for CRUD on Teams table
+- Added uncomplete functionality for CRUD operations on Teams table
+- Completed and fixed functionality for CRUD on Teams table
+18 December 2022
+- Created required files without functionality for Managers table
+- Added functional CRUD to Managers table
