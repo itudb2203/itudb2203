@@ -8,6 +8,11 @@
 
 4. Week (28 Nov - 3 Dec)
 
-4. Week (28 Nov - 3 Dec)
+5. Week (28 Nov - 3 Dec)
 - Created sinan/feature/pitching branch and pushed files
 
+6. Week (3 Dec - 10 Dec)
+- Add and Update endpoints added.
+
+7. Week (10 Dec - 17 Dec)
+- Fronted, exception handling, validation added.
