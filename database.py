@@ -43,13 +43,13 @@ class Database:
     def get_pitchings_by_playerID(self, playerID):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
-            query = """SELECT playerID, yearID, teamID, lgID, W, L, H FROM Pitching
+            query = """SELECT playerID, yearID, teamID, lgID, W, L, H, SV,G FROM Pitching
             WHERE playerID = ?"""
             cursor.execute(query, (playerID,))
             pitchings = []
-            for playerID, yearID, teamID, lgID, w, l, h in cursor:
+            for playerID, yearID, teamID, lgID, w, l, h, sv, g in cursor:
                 pitchings.append(
-                    Pitching(playerID, yearID, teamID, lgID, w, l, h))
+                    Pitching(playerID, yearID, teamID, lgID, w, l, h, sv, g))
             cursor.close()
             return pitchings
 
@@ -65,18 +65,18 @@ class Database:
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
             query = """INSERT INTO Pitching 
-            (playerID, yearid, teamID, lgID, W, L, H)
-            VALUES (?,?,?,?,?,?,?)"""
+            (playerID, yearid, teamID, lgID, W, L, H, SV, G)
+            VALUES (?,?,?,?,?,?,?,?,?)"""
             cursor.execute(query, (pitching.playerID, pitching.yearID,
-                           pitching.teamID, pitching.lgID, pitching.w, pitching.l, pitching.hits))
+                           pitching.teamID, pitching.lgID, pitching.w, pitching.l, pitching.hits, pitching.saves, pitching.games))
             cursor.close()
 
     def update_pitching(self, pitching, playerID, yearID):
         with dbapi2.connect(self.dbfile) as connection:
             cursor = connection.cursor()
             query = """UPDATE Pitching
-            SET teamID = ?, lgID =? ,w=?, l=?, yearid = ?, h=?
+            SET teamID = ?, lgID =? ,w=?, l=?, yearid = ?, h=?, sv=?, g=?
             WHERE playerID = ? AND yearID = ?"""
             cursor.execute(query, (pitching.teamID, pitching.lgID,
-                           pitching.w, pitching.l, pitching.yearID, pitching.hits,playerID, yearID))
+                           pitching.w, pitching.l, pitching.yearID, pitching.hits, pitching.saves, pitching.games, playerID, yearID))
             cursor.close()

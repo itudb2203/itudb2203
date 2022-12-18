@@ -44,12 +44,12 @@ def add_pitching(playerID):
         w_new = request.form.get("w")
         l_new = request.form.get("l")
         hits_new = request.form.get("hits")
-
-        print(yearID_new, teamID_new, lgID_new, w_new, l_new)
+        saves_new = request.form.get("saves")
+        games_new = request.form.get("games")
 
         try:
             new_pitching = Pitching(
-                playerID, int(yearID_new), teamID_new, lgID_new, int(w_new), int(l_new), int(hits_new))
+                playerID, int(yearID_new), teamID_new, lgID_new, int(w_new), int(l_new), int(hits_new), int(saves_new), int(games_new))
 
             myDB.add_pitching(new_pitching)
 
@@ -70,9 +70,12 @@ def update_pitching(playerID, yearID):
         w_updated = request.form.get("w")
         l_updated = request.form.get("l")
         hits_updated = request.form.get("hits")
+        saves_updated = request.form.get("saves")
+        games_updated = request.form.get("games")
+
         try:
             updated_pitching = Pitching(playerID, int(yearID_updated), teamID_updated,
-                                        lgID_updated, int(w_updated), int(l_updated), int(hits_updated))
+                                        lgID_updated, int(w_updated), int(l_updated), int(hits_updated), int(saves_updated), int(games_updated))
 
             myDB.update_pitching(updated_pitching, playerID, yearID)
 
