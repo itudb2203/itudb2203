@@ -6,7 +6,15 @@
 - Batting view function added 
 
 
-3. Week - 4.Week
+3. Week
 - Added hyperlinks to batting page
 - Batting delete function added on database class
 - Batting delete progress is working on page dynamically 
+
+4. Week
+-Batting update function added 
+-Batting add function added
+-CRUD pages added on html
+-All bugs fixed
+-Additionally appearances page added(not a main table
+therefore doesn't have CRUD operations)
