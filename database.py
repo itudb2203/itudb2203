@@ -1,4 +1,5 @@
 import sqlite3 as dbapi2
+from pitching import Pitching
 from player import Player
 from team import Team
 from hall_of_fame import HallOfFame
@@ -18,7 +19,8 @@ class Database:
             LIMIT 10 OFFSET ?"""
             cursor.execute(query, ((int(page_num) - 1) * 10,))
             for playerID, nameFirst, nameLast, birthYear, birthCountry, weight, height in cursor:
-                players_list.append(Player(playerID, nameFirst, nameLast, birthYear, birthCountry, weight, height))
+                players_list.append(
+                    Player(playerID, nameFirst, nameLast, birthYear, birthCountry, weight, height))
             cursor.close()
         return players_list
 
@@ -274,4 +276,45 @@ class Database:
 
             cursor.execute(query, (new_manager.playerID, new_manager.yearID, new_manager.teamID, new_manager.lgID, new_manager.inseason,
                                    new_manager.G, new_manager.W, new_manager.L, new_manager.rank, new_manager.plyrMgr))
+            cursor.close()
+
+    def get_pitchings_by_playerID(self, playerID):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """SELECT playerID, yearID, teamID, lgID, W, L, H, SV,G FROM Pitching
+            WHERE playerID = ?"""
+            cursor.execute(query, (playerID,))
+            pitchings = []
+            for playerID, yearID, teamID, lgID, w, l, h, sv, g in cursor:
+                pitchings.append(
+                    Pitching(playerID, yearID, teamID, lgID, w, l, h, sv, g))
+            cursor.close()
+            return pitchings
+
+    def delete_pitching(self, playerID, yearID):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """DELETE FROM Pitching
+            WHERE playerID = ? AND yearID = ?"""
+            cursor.execute(query, (playerID, yearID))
+            cursor.close()
+
+    def add_pitching(self, pitching):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """INSERT INTO Pitching 
+            (playerID, yearid, teamID, lgID, W, L, H, SV, G)
+            VALUES (?,?,?,?,?,?,?,?,?)"""
+            cursor.execute(query, (pitching.playerID, pitching.yearID,
+                           pitching.teamID, pitching.lgID, pitching.w, pitching.l, pitching.hits, pitching.saves, pitching.games))
+            cursor.close()
+
+    def update_pitching(self, pitching, playerID, yearID):
+        with dbapi2.connect(self.dbfile) as connection:
+            cursor = connection.cursor()
+            query = """UPDATE Pitching
+            SET teamID = ?, lgID =? ,w=?, l=?, yearid = ?, h=?, sv=?, g=?
+            WHERE playerID = ? AND yearID = ?"""
+            cursor.execute(query, (pitching.teamID, pitching.lgID,
+                           pitching.w, pitching.l, pitching.yearID, pitching.hits, pitching.saves, pitching.games, playerID, yearID))
             cursor.close()

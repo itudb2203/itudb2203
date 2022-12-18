@@ -6,7 +6,7 @@
         <a class="btn btn-outline-primary btn-lg mb-2"> Appearances </a>
         <a class="btn btn-outline-primary btn-lg mb-2"> Batting </a>
         <a class="btn btn-outline-primary btn-lg mb-2"> Fielding </a>
-        <a class="btn btn-outline-primary btn-lg mb-2"> Pitching </a>
+        <a class="btn btn-outline-primary btn-lg mb-2" href="{{ url_for('pitchings_page', page_num=1, playerID=playerID) }}">Pitching</a>
         <a class="btn btn-outline-primary btn-lg mb-2" href="{{ url_for('hall_of_fame_page', playerID=playerID, error='False') }}"> Hall of Fame </a>
     </div>
 

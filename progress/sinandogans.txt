@@ -1,1 +1,13 @@
+1. Week (7-13 Nov)
+- Completed the steps in "Github Instructions.pdf"
+
+2. Week (14-20 Nov)
+- Uploaded database file (lahman2016.sqlite)
+
+3. Week (21-27 Nov)
+
+4. Week (28 Nov - 3 Dec)
+
+4. Week (28 Nov - 3 Dec)
+- Created sinan/feature/pitching branch and pushed files
 
