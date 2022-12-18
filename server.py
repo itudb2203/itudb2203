@@ -42,14 +42,20 @@ def create_app():
     app.add_url_rule("/managers/<page_num>/update/<yearID>/<teamID>/<inseason>", methods=["GET", "POST"], view_func=views.update_manager)
     app.add_url_rule("/managers/<page_num>/add", methods=["GET", "POST"], view_func=views.add_manager)
 
-    app.add_url_rule("/player/<playerID>/pitchings",
-                     view_func=views.pitchings_page)
-    app.add_url_rule("/player/<playerID>/pitchings/delete/<yearID>",
-                     view_func=views.delete_pitching)
-    app.add_url_rule("/player/<playerID>/pitchings/update/<yearID>",
-                     methods=['GET', 'POST'], view_func=views.update_pitching)
-    app.add_url_rule("/player/<playerID>/pitchings/add",
-                     methods=['GET', 'POST'], view_func=views.add_pitching)
+    app.add_url_rule("/player/<playerID>/pitchings", view_func=views.pitchings_page)
+    app.add_url_rule("/player/<playerID>/pitchings/delete/<yearID>", view_func=views.delete_pitching)
+    app.add_url_rule("/player/<playerID>/pitchings/update/<yearID>", methods=['GET', 'POST'], view_func=views.update_pitching)
+    app.add_url_rule("/player/<playerID>/pitchings/add", methods=['GET', 'POST'], view_func=views.add_pitching)
+    app.add_url_rule("/player/<playerID>/batting/error:<error>", view_func=views.batting_page)
+    app.add_url_rule("/player/<playerID>/batting", view_func=views.batting_page)
+    app.add_url_rule("/player/<playerID>/appearances", view_func=views.appearances_page)
+    app.add_url_rule("/player/<playerID>/appearances/error:<error>", view_func=views.appearances_page)
+    app.add_url_rule("/player/<playerID>/appearances/delete/<yearid>", view_func=views.del_appearances)
+    app.add_url_rule("/player/<playerID>/appearances/update/<yearid>/<teamID>", methods=['GET', 'POST'],view_func=views.update_appearances)
+    app.add_url_rule("/player/<playerID>/appearances/add", methods=['GET', 'POST'], view_func=views.add_appearances)
+    app.add_url_rule("/player/<playerID>/batting/delete/<yearid>", view_func=views.del_batting)
+    app.add_url_rule("/player/<playerID>/batting/update/<teamID>/<yearid>", methods=['GET', 'POST'], view_func=views.update_batting)
+    app.add_url_rule("/player/<playerID>/batting/add", methods=['GET', 'POST'], view_func=views.add_batting)
     home_dir = os.getcwd()
 
     db = Database(os.path.join(home_dir, "lahman2016.sqlite"))
@@ -63,3 +69,5 @@ if __name__ == "__main__":
     app = create_app()
     port = app.config.get("PORT", 5000)
     app.run(host="0.0.0.0", port=port)
+
+
