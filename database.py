@@ -36,6 +36,16 @@ class Database:
             cursor = connection.cursor()
             query = "DELETE FROM Master WHERE playerID = ?"
             cursor.execute(query, (playerID,))
+            query = "DELETE FROM Appearances WHERE playerID = ?"
+            cursor.execute(query, (playerID,))
+            query = "DELETE FROM Batting WHERE playerID = ?"
+            cursor.execute(query, (playerID,))
+            query = "DELETE FROM Fielding WHERE playerID = ?"
+            cursor.execute(query, (playerID,))
+            query = "DELETE FROM Pitching WHERE playerID = ?"
+            cursor.execute(query, (playerID,))
+            query = "DELETE FROM HallOfFame WHERE playerID = ?"
+            cursor.execute(query, (playerID,))
             cursor.close()
 
 
