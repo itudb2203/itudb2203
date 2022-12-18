@@ -1,0 +1,191 @@
+{% extends "layout.html" %}
+{% block title %}Managers{% endblock %}
+{% block content %}
+
+
+    <h3 class="display-5 text-center mb-3 text-dark" > Managers </h3>
+
+    {% if error == 'True' %}
+      <div class="d-grid gap-2 col-5 mx-auto">
+        <div class="alert center-block alert-warning alert-dismissible fade show text-center" style="width:630px" role="alert" >
+          You should enter a valid data.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    {% endif %}
+
+    <table class="table is-striped is-fullwidth table-hover table-bordered">
+        <thead class="table-light">
+            <tr>
+            <th>#</th>
+            <th>Player ID</th>
+            <th>Year</th>
+            <th>Team</th>
+            <th>League</th>
+            <th>Managerial Order</th>
+            <th>Games</th>
+            <th>Wins</th>
+            <th>Losses</th>
+            <th>Rank</th>
+            <th>Player Manager</th>
+            <th>Operations</th>
+            </tr>
+        </thead>
+      {% for i in range(managers|length)%}
+      <tr>
+        <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
+        <td>{{ managers[i].playerID }}</td>
+        <td>{{ managers[i].yearID }}</td>
+        <td>{{ managers[i].teamID }}</td>
+        <td>{{ managers[i].lgID }}</td>
+        <td>{{ managers[i].inseason }}</td>
+        <td>{{ managers[i].G }}</td>
+        <td>{{ managers[i].W }}</td>
+        <td>{{ managers[i].L }}</td>
+        <td>{{ managers[i].rank }}</td>
+        <td>{{ managers[i].plyrMgr }}</td>
+        <td>
+          <div class="dropdown show">
+            <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Operations
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">  <!-- Dropdown menu for operations -->
+              <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#managerModal"
+                 data-bs-playerID="{{managers[i].playerID}}" data-bs-yearID="{{managers[i].yearID}}"
+                 data-bs-teamID="{{managers[i].teamID}}" data-bs-lgID="{{managers[i].lgID}}"
+                 data-bs-inseason="{{managers[i].inseason}}" data-bs-G="{{managers[i].G}}"
+                 data-bs-W="{{managers[i].W}}" data-bs-L="{{managers[i].L}}"
+                 data-bs-rank="{{managers[i].rank}}" data-bs-plyrMgr="{{managers[i].plyrMgr}}"
+                 data-bs-title="Update Manager"
+                 data-bs-url="{{url_for('update_manager', page_num=cur_page, yearID = managers[i].yearID, teamID = managers[i].teamID, inseason = managers[i].inseason)}}">Update</a>  <!-- Update button -->
+              <a class="dropdown-item" href="{{url_for('del_manager', page_num=cur_page, yearID = managers[i].yearID, teamID = managers[i].teamID, inseason = managers[i].inseason)}}">Delete</a>  <!-- Delete button -->
+
+            </div>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div class="modal fade" id="managerModal" tabindex="-1" aria-labelledby="managerModalLabel" aria-hidden="true"> <!-- Modal for update and add -->
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="managerModalLabel"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form method="post" id="formManager">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="playerID" class="col-form-label">Player ID:</label>
+                <input type="text" class="form-control" id="playerID" name="playerID">
+              </div>
+              <div class="mb-3">
+                <label for="yearID" class="col-form-label">Year:</label>
+                <input type="text" class="form-control" id="yearID" name="yearID">
+              </div>
+              <div class="mb-3">
+                <label for="teamID" class="col-form-label">Team:</label>
+                <input type="text" class="form-control" id="teamID" name="teamID">
+              </div>
+              <div class="mb-3">
+                <label for="lgID" class="col-form-label">League:</label>
+                <input type="text" class="form-control" id="lgID" name="lgID">
+              </div>
+              <div class="mb-3">
+                <label for="inseason" class="col-form-label">Managerial Order:</label>
+                <input type="text" class="form-control" id="inseason" name="inseason">
+              </div>
+              <div class="mb-3">
+                <label for="G" class="col-form-label">Games:</label>
+                <input type="text" class="form-control" id="G" name="G">
+              </div>
+              <div class="mb-3">
+                <label for="W" class="col-form-label">Wins:</label>
+                <input type="text" class="form-control" id="W" name="W">
+              </div>
+              <div class="mb-3">
+                <label for="L" class="col-form-label">Losses:</label>
+                <input type="text" class="form-control" id="L" name="L">
+              </div>
+              <div class="mb-3">
+                <label for="rank" class="col-form-label">Rank:</label>
+                <input type="text" class="form-control" id="rank" name="rank">
+              </div>
+              <div class="mb-3">
+                <label for="plyrMgr" class="col-form-label">Player Manager:</label>
+                <input type="text" class="form-control" id="plyrMgr" name="plyrMgr">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl">
+        <ul class="pagination justify-content-center mt-5">
+          <li class="page-item"><a class="page-link" href="{{ url_for('managers_page', page_num=1, error='False') }}"> << </a> </li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('managers_page', page_num=(1, cur_page - 1)|max, error='False') }}"> < </a> </li>
+          <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('managers_page', page_num=(num_pages, cur_page + 1)|min, error='False') }}"> > </a></li>
+          <li class="page-item"><a class="page-link" href="{{ url_for('managers_page', page_num=num_pages, error='False') }}"> >> </a></li>
+        </ul>
+      </div>
+    <div class="d-grid gap-2 col-5 mx-auto ">  <!-- Add manager button -->
+      <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#managerModal" data-bs-title="Add Manager"
+         data-bs-url="{{url_for('add_manager', page_num=cur_page, playerID = playerID)}}"> Add Manager </a>
+    </div>
+
+    <script type="text/javascript">
+      var managerModal = document.getElementById('managerModal') // Display managers data in the modal at the update operation
+      managerModal.addEventListener('show.bs.modal', function (event) {
+
+        var button = event.relatedTarget
+
+        var playerID = button.getAttribute('data-bs-playerID')
+        var yearID = button.getAttribute('data-bs-yearID')
+        var teamID = button.getAttribute('data-bs-teamID')
+        var lgID = button.getAttribute('data-bs-lgID')
+        var inseason = button.getAttribute('data-bs-inseason')
+        var G = button.getAttribute('data-bs-G')
+        var W = button.getAttribute('data-bs-W')
+        var L = button.getAttribute('data-bs-L')
+        var rank = button.getAttribute('data-bs-rank')
+        var plyrMgr = button.getAttribute('data-bs-plyrMgr')
+        var title = button.getAttribute('data-bs-title')
+        var url = button.getAttribute('data-bs-url')
+
+        var modalPlayerID = managerModal.querySelector('#playerID')
+        var modalYearID = managerModal.querySelector('#yearID')
+        var modalTeamID = managerModal.querySelector('#teamID')
+        var modalLgID = managerModal.querySelector('#lgID')
+        var modalInseason = managerModal.querySelector('#inseason')
+        var modalG = managerModal.querySelector('#G')
+        var modalW = managerModal.querySelector('#W')
+        var modalL = managerModal.querySelector('#L')
+        var modalRank = managerModal.querySelector('#rank')
+        var modalPlyrMgr = managerModal.querySelector('#plyrMgr')
+        var modalTitle = managerModal.querySelector('#managerModalLabel')
+        var modalForm = managerModal.querySelector('#formManager')
+
+        modalPlayerID.value = playerID
+        modalYearID.value = yearID
+        modalTeamID.value = teamID
+        modalLgID.value = lgID
+        modalInseason.value = inseason
+        modalG.value = G
+        modalW.value = W
+        modalL.value = L
+        modalRank.value = rank
+        modalPlyrMgr.value = plyrMgr
+        modalTitle.textContent = title
+        modalForm.action = url
+      })
+
+      if ( window.history.replaceState ) {  // Prevent confirm submission alerts from the browser
+        window.history.replaceState( null, null, window.location.href );
+      }
+    </script>
+{% endblock %}
