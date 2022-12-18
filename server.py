@@ -11,18 +11,16 @@ def create_app():
 
     app.add_url_rule("/", view_func=views.home_page)
     app.add_url_rule("/players/<page_num>", view_func=views.players_page)
-    app.add_url_rule("/player/<player_ID>", view_func=views.player_stats_page)
+    app.add_url_rule("/player/<playerID>", view_func=views.player_stats_page)
 
-    app.add_url_rule("/pitchings/<string:playerID>/<int:page_num>",
-                     methods=['GET'], view_func=views.pitchings_page)
-    app.add_url_rule("/pitchingsdetail/<string:playerID>/<int:page_num>",
-                     view_func=views.pitchings_detail_page)
-    app.add_url_rule("/pitchings/delete/<string:playerID>/<int:yearID>/<int:stint>/<int:page_num>",
+    app.add_url_rule("/player/<playerID>/pitchings",
+                     view_func=views.pitchings_page)
+    app.add_url_rule("/player/<playerID>/pitchings/delete/<yearID>",
                      view_func=views.delete_pitching)
-    app.add_url_rule("/pitchings/update/<int:page_num>",
+    app.add_url_rule("/player/<playerID>/pitchings/update/<yearID>",
                      methods=['GET', 'POST'], view_func=views.update_pitching)
-    app.add_url_rule("/pitchings/add/<int:page_num>",
-                     methods=['POST', 'GET'], view_func=views.add_pitching)
+    app.add_url_rule("/player/<playerID>/pitchings/add",
+                     methods=['GET', 'POST'], view_func=views.add_pitching)
     home_dir = os.getcwd()
 
     db = Database(os.path.join(home_dir, "lahman2016.sqlite"))

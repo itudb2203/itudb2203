@@ -2,47 +2,50 @@
 {% block title %}Pitching{% endblock %}
 {% block content %}
 <h3 class="display-5 text-center mb-3 text-dark" > Pitching </h3>
-<table class="table is-striped is-fullwidth table-hover">
-  <tr>
-  <th>#</th>
-  <th>Player ID</th>
-  <th>Year</th>
-  <th>Stint</th>
-  <th>Team ID</th>
-  <th>lg ID</th>
-  <th>Win</th>
-  <th>Lose</th>
-  <th>Operations</th>
-  </tr>
-  {% for i in range(pitchings|length)%}
-  <td>{{ (cur_page - 1) * 10 + i + 1}}</td>
-    <td>{{ pitchings[i].playerID }}</td>
-    <td>{{ pitchings[i].yearID }}</td>
-    <td>{{ pitchings[i].stint }}</td>
-    <td>{{ pitchings[i].teamID }}</td>
-    <td>{{ pitchings[i].lgID }}</td>
-    <td>{{ pitchings[i].w }}</td>
-    <td>{{ pitchings[i].l }}</td>
-    <td>
-      <div class="dropdown show">
-        <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Operations
-        </a>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#pitchingModal"
-          data-bs-playerID="{{pitchings[i].playerID}}" data-bs-yearID="{{pitchings[i].yearID}}" data-bs-teamID="{{pitchings[i].teamID}}"
-          data-bs-lgID="{{pitchings[i].lgID}}" data-bs-w="{{pitchings[i].w}}"
-          data-bs-l="{{pitchings[i].l}}" data-bs-title="Update Pitching"
-          data-bs-url="{{url_for('update_pitching', page_num=cur_page)}}">Update</a>
-          <a class="dropdown-item" href="{{url_for('delete_pitching', page_num=cur_page, playerID = pitchings[i].playerID, yearID = pitchings[i].yearID, stint = pitchings[i].stint)}}">Delete</a>
-        </div>
-      </div>
-    </td>
-  </tr>
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+    {% if pitchings %}
+    <table class="table is-striped is-fullwidth table-hover table-bordered">
+          <tr>
+          <th>#</th>
+          <th>Year</th>
+          <th>Team ID</th>
+          <th>lg ID</th>
+          <th>Win</th>
+          <th>Lose</th>
+          <th>Hits</th>
+          <th>Operations</th>
+          </tr>
+          {% for i in range(pitchings|length)%}
+          <td>{{ i + 1}}</td>
+            <td>{{ pitchings[i].yearID }}</td>
+            <td>{{ pitchings[i].teamID }}</td>
+            <td>{{ pitchings[i].lgID }}</td>
+            <td>{{ pitchings[i].w }}</td>
+            <td>{{ pitchings[i].l }}</td>
+            <td>{{ pitchings[i].hits }}</td>
+            <td>
+              <div class="dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Operations
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#pitchingModal"
+                  data-bs-playerID="{{pitchings[i].playerID}}" data-bs-yearID="{{pitchings[i].yearID}}" data-bs-teamID="{{pitchings[i].teamID}}"
+                  data-bs-lgID="{{pitchings[i].lgID}}" data-bs-w="{{pitchings[i].w}}"
+                  data-bs-l="{{pitchings[i].l}}" data-bs-hits="{{pitchings[i].hits}}" data-bs-title="Update Pitching"
+                  data-bs-url="{{url_for('update_pitching', playerID=playerID, yearID=pitchings[i].yearID)}}">Update</a>
+                  <a class="dropdown-item"
+                     href="{{url_for('delete_pitching', playerID = pitchings[i].playerID, yearID = pitchings[i].yearID)}}">Delete</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+    {% else %}
+      <h3 class="display-6 text-center mb-3 text-dark"> The player has no pitching.</h3>  <!-- If hof_list is empty -->
+    {% endif %}
 
 <div class="modal fade" id="pitchingModal" tabindex="-1" aria-labelledby="pitchingModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -53,10 +56,6 @@
       </div>
       <form method="post" id="formPitching">
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="playerID" class="col-form-label">Player ID:</label>
-            <input type="text" class="form-control" id="playerID" name="playerID" readonly>
-          </div>
           <div class="mb-3">
             <label for="yearID" class="col-form-label">Year:</label>
             <input type="text" class="form-control" id="yearID" name="yearID">
@@ -77,6 +76,10 @@
             <label for="l" class="col-form-label">Lose:</label>
             <input type="text" class="form-control" id="l" name="l">
           </div>
+          <div class="mb-3">
+            <label for="hits" class="col-form-label">Hits:</label>
+            <input type="text" class="form-control" id="hits" name="hits">
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -87,19 +90,10 @@
   </div>
 </div>
 
-<div class="col-xl">
-  <ul class="pagination justify-content-center mt-5">
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID, page_num=1) }}"> << </a> </li>
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID,page_num=(1, cur_page - 1)|max) }}"> < </a> </li>
-    <li class="page-item page-item disabled"><a class="page-link"> {{cur_page}} </a></li>
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID,page_num=(num_of_pages, cur_page + 1)|min) }}"> > </a></li>
-    <li class="page-item"><a class="page-link" href="{{ url_for('pitchings_page', playerID=pitchings[0].playerID,page_num=num_of_pages) }}"> >> </a></li>
-  </ul>
-</div>
 
 <div class="d-grid gap-2 col-5 mx-auto ">
-  <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#pitchingModal" data-bs-playerID="{{pitchings[0].playerID}}" data-bs-title="Add Pitching"  
-  data-bs-url="{{url_for('add_pitching', page_num=cur_page)}}"> Add Pitching </a>
+  <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#pitchingModal" data-bs-title="Add Pitching"
+  data-bs-url="{{url_for('add_pitching', playerID=playerID)}}"> Add Pitching </a>
 </div>
 
 <script type="text/javascript">
@@ -108,33 +102,30 @@
 
     var button = event.relatedTarget
 
-    var playerID = button.getAttribute('data-bs-playerID')
     var yearID = button.getAttribute('data-bs-yearID')
-    var stint = button.getAttribute('data-bs-stint')
     var teamID = button.getAttribute('data-bs-teamID')
     var lgID = button.getAttribute('data-bs-lgID')
     var w = button.getAttribute('data-bs-w')
     var l = button.getAttribute('data-bs-l')
+    var hits = button.getAttribute('data-bs-hits')
     var title = button.getAttribute('data-bs-title')
     var url = button.getAttribute('data-bs-url')
 
-    var modalPlayerID = pitchingModal.querySelector('#playerID')
     var modalyearID = pitchingModal.querySelector('#yearID')
-    var modalstint = pitchingModal.querySelector('#stint')
     var modalteamID = pitchingModal.querySelector('#teamID')
     var modallgID = pitchingModal.querySelector('#lgID')
     var modalw = pitchingModal.querySelector('#w')
     var modall = pitchingModal.querySelector('#l')
+    var modalhits = pitchingModal.querySelector('#hits')
     var modalTitle = pitchingModal.querySelector('#pitchingModalLabel')
     var modalForm = pitchingModal.querySelector('#formPitching')
 
-    modalPlayerID.value = playerID
     modalyearID.value = yearID
-    modalstint.value = stint
     modalteamID.value = teamID
     modallgID.value = lgID
     modalw.value = w
     modall.value = l
+    modalhits.value = hits
     modalTitle.textContent = title
     modalForm.action = url
   })
