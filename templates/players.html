@@ -45,10 +45,9 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">  <!-- Dropdown menu for operations -->
               <a class="dropdown-item" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#playerModal"
-                 data-bs-playerID="{{players[i].playerID}}" data-bs-nameFirst="{{players[i].nameFirst}}"
-                 data-bs-nameLast="{{players[i].nameLast}}" data-bs-birthYear="{{players[i].birthYear}}"
-                 data-bs-birthCountry="{{players[i].birthCountry}}" data-bs-weight="{{players[i].weight}}"
-                 data-bs-height="{{players[i].height}}" data-bs-title="Update Player"
+                 data-bs-nameFirst="{{players[i].nameFirst}}"  data-bs-nameLast="{{players[i].nameLast}}"
+                 data-bs-birthYear="{{players[i].birthYear}}" data-bs-birthCountry="{{players[i].birthCountry}}"
+                 data-bs-weight="{{players[i].weight}}" data-bs-height="{{players[i].height}}" data-bs-title="Update Player"
                  data-bs-url="{{url_for('update_player', page_num=cur_page, playerID = players[i].playerID)}}">Update</a>  <!-- Update button -->
               <a class="dropdown-item" href="{{url_for('del_player', page_num=cur_page, playerID = players[i].playerID)}}">Delete</a>  <!-- Delete button -->
               <a class="dropdown-item" href="{{ url_for('player_stats_page', playerID = players[i].playerID) }}">See Stats</a>   <!-- See Stats button -->
@@ -68,10 +67,6 @@
           <form method="post" id="formPlayer">
             <div class="modal-body">
               <div class="mb-3">
-                <label for="playerID" class="col-form-label">Player ID:</label>
-                <input type="text" class="form-control" id="playerID" name="playerID">
-              </div>
-              <div class="mb-3">
                 <label for="nameFirst" class="col-form-label">First Name:</label>
                 <input type="text" class="form-control" id="nameFirst" name="nameFirst">
               </div>
@@ -88,11 +83,11 @@
                 <input type="text" class="form-control" id="birthCountry" name="birthCountry">
               </div>
               <div class="mb-3">
-                <label for="weight" class="col-form-label">Weight:</label>
+                <label for="weight" class="col-form-label">Weight (lbs):</label>
                 <input type="text" class="form-control" id="weight" name="weight">
               </div>
               <div class="mb-3">
-                <label for="height" class="col-form-label">Height:</label>
+                <label for="height" class="col-form-label">Height (inch):</label>
                 <input type="text" class="form-control" id="height" name="height">
               </div>
             </div>
@@ -115,7 +110,7 @@
     </div>
     <div class="d-grid gap-2 col-5 mx-auto ">  <!-- Add player button -->
       <a class="btn btn-success text-center btn-lg mt-4 mb-5" data-bs-toggle="modal" data-bs-target="#playerModal" data-bs-title="Add Player"
-         data-bs-url="{{url_for('add_player', page_num=cur_page, playerID = playerID)}}"> Add Player </a>
+         data-bs-url="{{url_for('add_player', page_num=cur_page)}}"> Add Player </a>
     </div>
 
     <script type="text/javascript">
@@ -124,7 +119,6 @@
 
         var button = event.relatedTarget
 
-        var playerID = button.getAttribute('data-bs-playerID')
         var nameFirst = button.getAttribute('data-bs-nameFirst')
         var nameLast = button.getAttribute('data-bs-nameLast')
         var birthYear = button.getAttribute('data-bs-birthYear')
@@ -134,7 +128,6 @@
         var title = button.getAttribute('data-bs-title')
         var url = button.getAttribute('data-bs-url')
 
-        var modalPlayerID = playerModal.querySelector('#playerID')
         var modalNameFirst = playerModal.querySelector('#nameFirst')
         var modalNameLast = playerModal.querySelector('#nameLast')
         var modalBirthYear = playerModal.querySelector('#birthYear')
@@ -144,7 +137,6 @@
         var modalTitle = playerModal.querySelector('#playerModalLabel')
         var modalForm = playerModal.querySelector('#formPlayer')
 
-        modalPlayerID.value = playerID
         modalNameFirst.value = nameFirst
         modalNameLast.value = nameLast
         modalBirthYear.value = birthYear

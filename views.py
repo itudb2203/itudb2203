@@ -33,8 +33,6 @@ def update_player(page_num, playerID):
     error = 'False'  # Error message is not displayed if there's no exception
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
-
-        playerID_updated = request.form.get("playerID")
         nameFirst_updated = request.form.get("nameFirst")
         nameLast_updated = request.form.get("nameLast")
         birthYear_updated = request.form.get("birthYear")
@@ -42,8 +40,8 @@ def update_player(page_num, playerID):
         weight_updated = request.form.get("weight")
         height_updated = request.form.get("height")
         try:
-            updated_player = Player(playerID_updated, nameFirst_updated, nameLast_updated, birthYear_updated,
-                                    birthCountry_updated, weight_updated, height_updated)
+            updated_player = Player(playerID, nameFirst_updated, nameLast_updated, int(birthYear_updated),
+                                    birthCountry_updated, int(weight_updated), int(height_updated))
 
             myDB.update_player(playerID, updated_player)
 
@@ -58,7 +56,6 @@ def add_player(page_num):
     if request.method == "POST":
         myDB = current_app.config["dbconfig"]
 
-        playerID_new = request.form.get("playerID")
         nameFirst_new = request.form.get("nameFirst")
         nameLast_new = request.form.get("nameLast")
         birthYear_new = request.form.get("birthYear")
@@ -66,9 +63,29 @@ def add_player(page_num):
         weight_new = request.form.get("weight")
         height_new = request.form.get("height")
 
+        # We will autogenerate id for the new player.
+        # PlayerID format : last name's first 5 letter (if less, take the whole string) + first name's first 2 letter + index
+        # It's in lower case. index has a length of 2. If it's a single digit integer, there's a 0 in the front.
+        # Index is incremented if there exists a player with the same id
+        id_lname_len = min(4, len(nameLast_new))  # Length of last name's part in the id
+        id_fname_len = min(2, len(nameFirst_new))  # Length of first name's part in the id
+        id_lname = nameLast_new[:id_lname_len]  # Last name's part in the id
+        id_fname = nameFirst_new[:id_fname_len]  # First name's part in the id
+
+        id_str = (id_lname + id_fname).lower()  # Id without index
+        id_ind = 1  # Index part of id
+
         try:
-            new_player = Player(playerID_new, nameFirst_new, nameLast_new, birthYear_new, birthCountry_new, weight_new,
-                                height_new)
+            while True:
+                playerID_new = id_str + f'{id_ind:02d}'  # Append the index to string part to get the player
+
+                if (myDB.check_player(playerID_new) == 0):  # Check if there's a player with same id
+                    break  # If there's no player with the same id, use that id
+                else:
+                    id_ind += 1  # If there's continue increasing index
+
+            new_player = Player(playerID_new, nameFirst_new, nameLast_new, int(birthYear_new), birthCountry_new, int(weight_new),
+                                int(height_new))
 
             myDB.add_player(new_player)
 
@@ -110,7 +127,7 @@ def update_hall_of_fame(playerID, yearid, votedBy):
             if (int(ballots_updated) < int(needed_updated)) or (int(ballots_updated) < int(votes_updated)):
                 raise Exception
 
-            updated_hof = HallOfFame(yearid_updated, votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
+            updated_hof = HallOfFame(int(yearid_updated), votedBy_updated, ballots_updated, needed_updated, votes_updated, inducted_updated, category_updated)
 
             myDB.update_hall_of_fame(playerID, yearid, votedBy, updated_hof)
 
@@ -137,7 +154,7 @@ def add_hall_of_fame(playerID):
             if (int(ballots_new) < int(needed_new)) or (int(ballots_new) < int(votes_new)):
                 raise Exception
 
-            new_hof = HallOfFame(yearid_new, votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
+            new_hof = HallOfFame(int(yearid_new), votedBy_new, ballots_new, needed_new, votes_new, inducted_new, category_new)
 
             myDB.add_hall_of_fame(playerID, new_hof)
 
