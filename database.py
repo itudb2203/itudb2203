@@ -46,6 +46,8 @@ class Database:
             cursor.execute(query, (playerID,))
             query = "DELETE FROM HallOfFame WHERE playerID = ?"
             cursor.execute(query, (playerID,))
+            query = "DELETE FROM Managers WHERE playerID = ?"
+            cursor.execute(query, (playerID,))
             cursor.close()
 
 
